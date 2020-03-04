@@ -1,4 +1,6 @@
 # MTAA: Čili Cat - backend
 
 ## Špecifikácia API rozhrania
-- [link](API.md)
+- [Dátový model](data-model.png)
+- [API Dokumentácia](API.md)
+- [API Dokumentácia [PDF]](API.pdf)
