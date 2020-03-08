@@ -1,0 +1,9 @@
+{
+    "db_host": "localhost",
+    "db_port": 3306,
+    "db_user": "mtaa",
+    "db_password": "password",
+    "db_db": "mtaa",
+    "secret": "mysupersecret",
+    "jwt_secret": "myothersupersecret"
+}

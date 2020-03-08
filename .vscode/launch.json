@@ -18,6 +18,11 @@
                 "run", "--no-debugger", "--no-reload"
             ],
             "jinja": true
+        }, {
+            "name": "Python: server.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/server.py"
         }
     ]
 }
