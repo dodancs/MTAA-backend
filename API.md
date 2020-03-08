@@ -111,6 +111,7 @@
     ```
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -219,17 +220,20 @@
 - popis: Úprava používateľa
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
+    
     - __{uuid}__: Unikátny identifikačný reťazec používateľa
   - telo požiadavky:
     ```json
     {
       "password": "novehesielko"
-    }
+  }
     ```
-
+  
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -261,6 +265,7 @@
     - __{uuid}__: Unikátny identifikačný reťazec používateľa
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -317,7 +322,7 @@
           }
         ]
       }
-      ```
+    ```
 
 -----------
 
@@ -357,6 +362,7 @@
 - popis: Pridanie novej mačky
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -378,7 +384,7 @@
       ]
     }
     ```
-
+  
 - odpoveď:
   - HTTP kód: 200
   - telo odpovede:
@@ -403,8 +409,10 @@
 - popis: Úprava existujúcej mačky
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
+    
     - __{uuid}__: Unikátny identifikačný reťazec používateľa
   - telo požiadavky:
     ```json
@@ -415,10 +423,11 @@
       "pictures": [
         "image/png;base64;r32urgy4h4....."
       ]
-    }
+  }
     ```
-
+  
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -450,6 +459,7 @@
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -481,6 +491,7 @@
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -512,6 +523,7 @@
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -534,6 +546,7 @@
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -562,19 +575,19 @@
 - odpoved
   - HTTP kód: 200
   - telo odpovede:
-  ```json
-    {
-      "count": 3,
-      "comments": [
-        {
-          "uuid": "uuidstring",
-          "author": "uuidstring", 
-          "cat": "uuidstring", 
-          "text": "Tá je úplne krásna! 😍",
-          "created_at": "2020-02-19 08:46:28"
-        }
-      ]
-    }
+    ```json
+      {
+        "count": 3,
+        "comments": [
+          {
+            "uuid": "uuidstring",
+            "author": "uuidstring", 
+            "cat": "uuidstring", 
+            "text": "Tá je úplne krásna! 😍",
+            "created_at": "2020-02-19 08:46:28"
+          }
+        ]
+      }
     ```
 
 - odpoveď:
@@ -592,8 +605,10 @@
 - popis: Pridanie komentára k danej mačke
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
+    
     - __{uuid}__: Unikátny identifikačný reťazec mačky
   - telo požiadavky:
     ```json
@@ -601,12 +616,13 @@
       "author": "uuidstring", 
       "cat": "uuidstring", 
       "text": "Tá je úplne krásna! 😍"
-    }
+  }
     ```
-
+  
 - odpoved
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
@@ -636,8 +652,9 @@
     - __{uuid}__: Unikátny identifikačný reťazec komentára
 
 - odpoveď:
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
@@ -667,7 +684,7 @@
 
 #### <a name="route-shelterneeds-get"></a>/shelterneeds : GET
 - popis: Zobrazenie potrieb útulku
-- správanie: V prípade, že je používateľ prihlásený a má rolu administrátora, bude mu zobrazené aj pole "show". V opačnom prípade budú zobrazené len potreby, ktoré majú tento parameter nastavený na hodnotu `true`.
+- správanie: V prípade, že je používateľ prihlásený a má rolu administrátora, bude mu zobrazené aj pole "hide". V opačnom prípade budú zobrazené len potreby, ktoré majú tento parameter nastavený na hodnotu `false`.
 - požiadavka
   - HTTP hlavičky (nepovinné): 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
@@ -683,7 +700,7 @@
           "uuid": "uuidstring",
           "name": "Suché granule", 
           "details": "Granule suchého typu, preferovane od značiek Whiskas.", 
-          "show": true
+          "hide": false
         }
       ]
     }
@@ -703,6 +720,7 @@
     ```
 
 - odpoveď:
+  
   - HTTP kód: 200
   
 - odpoveď:
@@ -734,8 +752,9 @@
     - __{uuid}__: Unikátny identifikačný reťazec potreby útulku
 
 - odpoved
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
@@ -765,8 +784,9 @@
     - __{uuid}__: Unikátny identifikačný reťazec potreby útulku
 
 - odpoveď:
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
@@ -804,8 +824,9 @@
     ```
 
 - odpoveď:
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
@@ -840,15 +861,15 @@
       "count": 3,
       "colours": [
         {
-          "id": 0
+          "id": 0,
           "name": "čierna"
         },
         {
-          "id": 1
+          "id": 1,
           "name": "šedá"
         },
         {
-          "id": 2
+          "id": 2,
           "name": "hnedá"
         }
       ]
@@ -862,6 +883,7 @@
 
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -869,7 +891,7 @@
       "name": "biela"
     }
     ```
-
+  
 - odpoveď:
   - HTTP kód: 200
   - telo odpovede:
@@ -909,8 +931,9 @@
     - __{id}__: Unikátny identifikátor farby
 
 - odpoveď:
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
@@ -933,15 +956,15 @@
       "count": 3,
       "colours": [
         {
-          "id": 0
+          "id": 0,
           "name": "perzská"
         },
         {
-          "id": 1
+          "id": 1,
           "name": "britská modrá"
         },
         {
-          "id": 2
+          "id": 2,
           "name": "egyptská"
         }
       ]
@@ -955,6 +978,7 @@
 
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -962,7 +986,7 @@
       "name": "maincoon"
     }
     ```
-
+  
 - odpoveď:
   - HTTP kód: 200
   - telo odpovede:
@@ -1002,8 +1026,9 @@
     - __{id}__: Unikátny identifikátor plemena
 
 - odpoveď:
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
@@ -1026,15 +1051,15 @@
       "count": 3,
       "colours": [
         {
-          "id": 0
+          "id": 0,
           "name": "zdravá"
         },
         {
-          "id": 1
+          "id": 1,
           "name": "začervená"
         },
         {
-          "id": 2
+          "id": 2,
           "name": "chorá"
         }
       ]
@@ -1048,6 +1073,7 @@
 
 - požiadavka
   - HTTP hlavičky: 
+    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -1055,7 +1081,7 @@
       "name": "ochrnutá"
     }
     ```
-
+  
 - odpoveď:
   - HTTP kód: 200
   - telo odpovede:
@@ -1095,8 +1121,9 @@
     - __{id}__: Unikátny identifikátor zdravotného stavu
 
 - odpoveď:
-  - HTTP kód: 200
-
+  
+- HTTP kód: 200
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
