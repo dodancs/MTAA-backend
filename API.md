@@ -190,7 +190,7 @@
       "activated": true,
       "admin": false,
       "donations": 0,
-      "picture": "data:image/png;base64;32ur4r2r3t5.....",
+      "picture": "data:image/png;base64,32ur4r2r3t5.....",
       "created_at": "2020-02-19 08:46:28",
       "updated_at": "2020-02-19 08:46:28"
     }
@@ -317,7 +317,7 @@
           "desctiption": "Toto je moje zlaticko..",
           "adoptive": true,
           "pictures": [
-            "image/png;base64;32ur4r2r3t5....."
+            "data:image/png;base64,32ur4r2r3t5....."
           ]
         }
       ]
@@ -351,7 +351,7 @@
       "health_log": "Problemy u veterinara nikdy neboli...",
       "adoptive": true,
       "pictures": [
-        "image/png;base64;32ur4r2r3t5....."
+        "data:image/png;base64,32ur4r2r3t5....."
       ]
     }
     ```
@@ -380,7 +380,7 @@
       "health_log": "Problemy u veterinara nikdy neboli...",
       "adoptive": true,
       "pictures": [
-        "image/png;base64;32ur4r2r3t5....."
+        "data:image/png;base64,32ur4r2r3t5....."
       ]
     }
     ```
@@ -421,7 +421,7 @@
       "health_status": 1,
       "castrated": true,
       "pictures": [
-        "image/png;base64;r32urgy4h4....."
+        "data:image/png;base64,r32urgy4h4....."
       ]
     }
     ```
