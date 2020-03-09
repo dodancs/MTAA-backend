@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `mtaa`.`cats`;
 CREATE TABLE `mtaa`.`cats` (
   `id` SERIAL NOT NULL,
   `uuid` VARCHAR(36) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(256) NOT NULL,
   `age` SMALLINT NOT NULL,
   `sex` BOOLEAN NOT NULL,
   `breed` bigint(20) NOT NULL REFERENCES breeds(id) ON DELETE RESTRICT,

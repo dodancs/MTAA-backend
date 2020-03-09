@@ -152,7 +152,6 @@
           "lastname": "Mrkvička",
           "activated": true,
           "admin": false,
-          "donations": 0,
           "created_at": "2020-02-19 08:46:28",
           "updated_at": "2020-02-19 08:46:28"
         }
@@ -191,6 +190,7 @@
       "activated": true,
       "admin": false,
       "donations": 0,
+      "picture": "data:image/png;base64;32ur4r2r3t5.....",
       "created_at": "2020-02-19 08:46:28",
       "updated_at": "2020-02-19 08:46:28"
     }
