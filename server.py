@@ -332,12 +332,16 @@ def auth_delete_user(uuid):
 
     try:
         match = models.User.get(models.User.uuid == uuid)
+        activations = models.Activation.select().where(
+            models.Activation.user == match.uuid)
     except peewee.DoesNotExist:
         return Response('invalid')
     except:
         return Response('server_error')
 
     match.delete_instance()
+    for a in activations:
+        a.delete_instance()
 
     if uuid == user.uuid:
         blacklist.add(get_raw_jwt()['jti'])
