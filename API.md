@@ -229,7 +229,7 @@
     ```json
     {
       "password": "novehesielko"
-  }
+    }
     ```
   
 - odpoveď:
@@ -306,22 +306,22 @@
   - HTTP kód: 200
   - telo odpovede:
     ```json
-      {
-        "count": 71,
-        "cats": [
-          {
-            "uuid": "uuidstring",
-            "name": "Micka", 
-            "age": 3,
-            "sex": true,
-            "desctiption": "Toto je moje zlaticko..",
-            "adoptive": true,
-            "pictures": [
-              "image/png;base64;32ur4r2r3t5....."
-            ]
-          }
-        ]
-      }
+    {
+      "count": 71,
+      "cats": [
+        {
+          "uuid": "uuidstring",
+          "name": "Micka", 
+          "age": 3,
+          "sex": true,
+          "desctiption": "Toto je moje zlaticko..",
+          "adoptive": true,
+          "pictures": [
+            "image/png;base64;32ur4r2r3t5....."
+          ]
+        }
+      ]
+    }
     ```
 
 -----------
@@ -423,7 +423,7 @@
       "pictures": [
         "image/png;base64;r32urgy4h4....."
       ]
-  }
+    }
     ```
   
 - odpoveď:
@@ -576,18 +576,18 @@
   - HTTP kód: 200
   - telo odpovede:
     ```json
-      {
-        "count": 3,
-        "comments": [
-          {
-            "uuid": "uuidstring",
-            "author": "uuidstring", 
-            "cat": "uuidstring", 
-            "text": "Tá je úplne krásna! 😍",
-            "created_at": "2020-02-19 08:46:28"
-          }
-        ]
-      }
+    {
+      "count": 3,
+      "comments": [
+        {
+          "uuid": "uuidstring",
+          "author": "uuidstring", 
+          "cat": "uuidstring", 
+          "text": "Tá je úplne krásna! 😍",
+          "created_at": "2020-02-19 08:46:28"
+        }
+      ]
+    }
     ```
 
 - odpoveď:
