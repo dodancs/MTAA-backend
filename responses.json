@@ -1,0 +1,8 @@
+{
+    "not_json": [{ "error": "HTTP požiadavka musí byť vo formáte JSON" }, 400],
+    "server_error": [{ "error": "Nastala serverová chyba" }, 500],
+    "forbidden": [{ "error": "Prístup zamietnutý" }, 401],
+    "invalid": [{ "error": "Neplatný identifikátor" }, 400],
+    "invalid_image": [{ "error": "Nesprávny formát obrázku" }, 400],
+    "invalid_format": [{ "error": "Nesprávny formát dát" }, 400]
+}
