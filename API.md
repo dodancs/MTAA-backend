@@ -1049,7 +1049,7 @@
     ```json
     {
       "count": 3,
-      "colours": [
+      "health_statuses": [
         {
           "id": 0,
           "name": "zdravá"
