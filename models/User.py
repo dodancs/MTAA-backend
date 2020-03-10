@@ -6,7 +6,7 @@ from models.BaseModel import BaseModel
 class User(BaseModel):
     id = peewee.BigAutoField(unique=True, index=True, primary_key=True)
     uuid = peewee.CharField(unique=True, index=True, max_length=36)
-    email = peewee.TextField(unique=True, index=True)
+    email = peewee.CharField(unique=True, index=True)
     password = peewee.CharField(max_length=1024)
     firstname = peewee.CharField(max_length=256)
     lastname = peewee.CharField(max_length=256)
