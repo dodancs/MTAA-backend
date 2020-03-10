@@ -30,7 +30,7 @@ def MakeHash(password, salt):
 
 
 # Convert image
-def ConvertImage(picture):
+def ConvertImage(picture, width, height):
     # Try to parse Base64 data
     try:
         base64.b64decode(re.sub('^data:image/.+;base64,', '', picture))
@@ -47,7 +47,7 @@ def ConvertImage(picture):
         return None
 
     buffer = BytesIO()
-    image.thumbnail((256, 256))
+    image.thumbnail((width, height))
     image.save(buffer, format="PNG")
 
     return bytes(

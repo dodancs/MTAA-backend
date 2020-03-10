@@ -92,7 +92,7 @@ def auth_register():
         picture = Config['default_picture']
 
     picture = str(escape(picture)).strip()
-    result = ConvertImage(picture)
+    result = ConvertImage(picture, Config['avatar_width'], Config['avatar_height'])
 
     if not result:
         return Response('invalid_image')
@@ -175,8 +175,6 @@ def auth_get_user(uuid):
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
-    if uuid != user.uuid and not user.admin:
-        return Response('forbidden')
 
     try:
         match = models.User.get(models.User.uuid == uuid)
@@ -185,18 +183,26 @@ def auth_get_user(uuid):
     except:
         return Response('server_error')
 
-    return jsonify({
-        "uuid": match.uuid,
-        "email": match.email,
-        "firstname": match.firstname,
-        "lastname": match.lastname,
-        "activated": True if match.activated else False,
-        "admin": True if match.admin else False,
-        "donations": match.donations,
-        "picture": match.picture,
-        "created_at": match.created_at.strftime(Config['date_format']),
-        "updated_at": match.updated_at.strftime(Config['date_format'])
-    }), 200
+    if uuid == user.uuid or user.admin:
+        return jsonify({
+            "uuid": match.uuid,
+            "email": match.email,
+            "firstname": match.firstname,
+            "lastname": match.lastname,
+            "activated": True if match.activated else False,
+            "admin": True if match.admin else False,
+            "donations": match.donations,
+            "picture": match.picture,
+            "created_at": match.created_at.strftime(Config['date_format']),
+            "updated_at": match.updated_at.strftime(Config['date_format'])
+        }), 200
+    else:
+        return jsonify({
+            "uuid": match.uuid,
+            "firstname": match.firstname,
+            "lastname": match.lastname,
+            "picture": match.picture
+        }), 200
 
 
 @app.route('/auth/users/<uuid>', methods=['PUT'])
@@ -250,7 +256,7 @@ def auth_update_user(uuid):
         match.lastname = str(escape(lastname)).strip()
     if picture:
         picture = str(escape(picture)).strip()
-        result = ConvertImage(picture)
+        result = ConvertImage(picture, Config['avatar_width'], Config['avatar_height'])
 
         if not result:
             return Response('invalid_image')
