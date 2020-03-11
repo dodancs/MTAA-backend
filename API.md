@@ -20,6 +20,10 @@
   - [Adoptácia mačky](#route-cats-adopt)
   - [Pridanie do obľúbených](#route-cats-like)
   - [Odobratie z obľúbených](#route-cats-unlike)
+- [Správa obrázkov](#route-pictures)
+  - [Zobrazenie obrázku](#route-pictures-get)
+  - [Pridanie obrázku](#route-pictures-add)
+  - [Zmazanie obrázku](#route-pictures-delete)
 - [Správa komentárov](#route-comments)
   - [Zobrazenie komentárov pre mačku](#route-comments-get)
   - [Pridanie komentára](#route-comments-add)
@@ -89,7 +93,7 @@
 
 #### <a name="route-auth-logout"></a>/auth/logout : GET
 - popis: Odhlásenie používateľa
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
 - odpoveď:
@@ -99,7 +103,7 @@
 
 #### <a name="route-auth-register"></a>/auth/register : POST
 - popis: Registrácia nového používateľa
-- požiadavka
+- požiadavka:
   - telo požiadavky:
     ```json
     {
@@ -111,7 +115,6 @@
     ```
 
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -134,7 +137,7 @@
 
 #### <a name="route-auth-getUsers"></a>/auth/users : GET
 - popis: Zobrazenie všetkých používateľov
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
 
@@ -172,7 +175,7 @@
 
 #### <a name="route-auth-getUser"></a>/auth/users/{uuid} : GET
 - popis: Zobrazenie detailu používateľa
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
@@ -190,7 +193,7 @@
       "activated": true,
       "admin": false,
       "donations": 0,
-      "picture": "data:image/png;base64,32ur4r2r3t5.....",
+      "picture": "uuidstring",
       "created_at": "2020-02-19 08:46:28",
       "updated_at": "2020-02-19 08:46:28"
     }
@@ -218,7 +221,7 @@
 
 #### <a name="route-auth-updateUser"></a>/auth/users/{uuid} : PUT
 - popis: Úprava používateľa
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
@@ -233,7 +236,6 @@
     ```
   
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -258,14 +260,13 @@
 
 #### <a name="route-auth-updateUser"></a>/auth/users/{uuid} : DELETE
 - popis: Odstránenie používateľa
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec používateľa
 
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -301,8 +302,11 @@
 
 #### <a name="route-cats-getAll"></a>/cats : GET
 - popis: Zobrazenie všetkých mačiek
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
 
-- odpoved
+- odpoveď:
   - HTTP kód: 200
   - telo odpovede:
     ```json
@@ -317,7 +321,8 @@
           "desctiption": "Toto je moje zlaticko..",
           "adoptive": true,
           "pictures": [
-            "data:image/png;base64,32ur4r2r3t5....."
+            "uuidstring1",
+            "uuidstring2"
           ]
         }
       ]
@@ -328,11 +333,13 @@
 
 #### <a name="route-cats-get"></a>/cats/{uuid} : GET
 - popis: Zobrazenie detailu mačky
-- požiadavka
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
-- odpoved
+- odpoveď:
   - HTTP kód: 200
   - telo odpovede:
     ```json
@@ -351,7 +358,8 @@
       "health_log": "Problemy u veterinara nikdy neboli...",
       "adoptive": true,
       "pictures": [
-        "data:image/png;base64,32ur4r2r3t5....."
+        "uuidstring1",
+        "uuidstring2"
       ]
     }
     ```
@@ -360,9 +368,8 @@
 
 #### <a name="route-cats-add"></a>/cats : POST
 - popis: Pridanie novej mačky
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -380,7 +387,8 @@
       "health_log": "Problemy u veterinara nikdy neboli...",
       "adoptive": true,
       "pictures": [
-        "data:image/png;base64,32ur4r2r3t5....."
+        "uuidstring1",
+        "uuidstring2"
       ]
     }
     ```
@@ -407,12 +415,10 @@
 
 #### <a name="route-cats-update"></a>/cats/{uuid} : PUT
 - popis: Úprava existujúcej mačky
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
-    
     - __{uuid}__: Unikátny identifikačný reťazec používateľa
   - telo požiadavky:
     ```json
@@ -421,7 +427,8 @@
       "health_status": 1,
       "castrated": true,
       "pictures": [
-        "data:image/png;base64,r32urgy4h4....."
+        "uuidstring1",
+        "uuidstring2"
       ]
     }
     ```
@@ -452,14 +459,13 @@
 
 #### <a name="route-cats-update"></a>/cats/{uuid} : DELETE
 - popis: Odstránenie mačky
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -484,14 +490,13 @@
 
 #### <a name="route-cats-adopt"></a>/cats/{uuid}/adopt : POST
 - popis: Adoptovanie mačky
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -516,14 +521,13 @@
 
 #### <a name="route-cats-like"></a>/cats/{uuid}/like : POST
 - popis: Uloženie mačky do obľúbených
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -539,16 +543,114 @@
 
 #### <a name="route-cats-unlike"></a>/cats/{uuid}/unlike : POST
 - popis: Odobratie mačky z obľúbených
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
 - odpoveď:
-  
   - HTTP kód: 200
   
+- odpoveď:
+  - HTTP kód: 400
+  - telo odpovede: 
+	  ```json
+	  {
+      "error": "Neplatný identifikátor..."
+    }
+    ```
+
+-----------
+-----------
+
+### <a name="route-pictures"></a>Správa obrázkov
+- [Zobrazenie obrázku](#route-pictures-get)
+- [Pridanie obrázku](#route-pictures-add)
+- [Zmazanie obrázku](#route-pictures-delete)
+
+#### <a name="route-pictures-get"></a>/pictures/{uuid} : GET
+- popis: Zobrazenie obrázku
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
+  - parametre:
+    - __{uuid}__: Unikátny identifikačný reťazec obrázku
+
+- odpoveď:
+  - HTTP kód: 200
+  - HTTP hlavičky: 
+    - `Content-type: image/png`
+  - telo odpovede: `binarne data`
+
+- odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+	  ```json
+	  {
+      "error": "Prístup zamietnutý..."
+    }
+    ```
+
+- odpoveď:
+  - HTTP kód: 400
+  - telo odpovede: 
+	  ```json
+	  {
+      "error": "Neplatný identifikátor..."
+    }
+    ```
+
+-----------
+
+#### <a name="route-pictures-add"></a>/pictures : POST
+- popis: Pridanie nového obrázku
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
+    - `Content-type: multipart/form-data`
+  - telo požiadavky: `binarne data`
+
+- odpoveď:
+  - HTTP kód: 200
+  - telo odpovede:
+    ```json
+    {
+      "uuid": "uuidstring"
+    }
+    ```
+
+- odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+	  ```json
+	  {
+      "error": "Prístup zamietnutý..."
+    }
+    ```
+
+-----------
+
+#### <a name="route-pictures-delete"></a>/pictures/{uuid} : DELETE
+- popis: Zobrazenie obrázku
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
+  - parametre:
+    - __{uuid}__: Unikátny identifikačný reťazec obrázku
+
+- odpoveď:
+  - HTTP kód: 200
+
+- odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+	  ```json
+	  {
+      "error": "Prístup zamietnutý..."
+    }
+    ```
+
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
@@ -568,11 +670,13 @@
 
 #### <a name="route-comments-get"></a>/comments/{uuid} : GET
 - popis: Zobrazenie komentárov pre danú mačku
-- požiadavka
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec mačky
 
-- odpoved
+- odpoveď:
   - HTTP kód: 200
   - telo odpovede:
     ```json
@@ -603,12 +707,10 @@
 
 #### <a name="route-comments-add"></a>/comments/{uuid} : POST
 - popis: Pridanie komentára k danej mačke
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
-    
     - __{uuid}__: Unikátny identifikačný reťazec mačky
   - telo požiadavky:
     ```json
@@ -619,9 +721,8 @@
   }
     ```
   
-- odpoved
-  
-- HTTP kód: 200
+- odpoveď:
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
@@ -645,15 +746,14 @@
 
 #### <a name="route-comments-delete"></a>/comments/{uuid} : DELETE
 - popis: Zmazanie komentára
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec komentára
 
 - odpoveď:
-  
-- HTTP kód: 200
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
@@ -685,11 +785,11 @@
 #### <a name="route-shelterneeds-get"></a>/shelterneeds : GET
 - popis: Zobrazenie potrieb útulku
 - správanie: V prípade, že je používateľ prihlásený a má rolu administrátora, bude mu zobrazené aj pole "hide". V opačnom prípade budú zobrazené len potreby, ktoré majú tento parameter nastavený na hodnotu `false`.
-- požiadavka
+- požiadavka:
   - HTTP hlavičky (nepovinné): 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
 
-- odpoved
+- odpoveď:
   - HTTP kód: 200
   - telo odpovede:
     ```json
@@ -710,7 +810,9 @@
 
 #### <a name="route-shelterneeds-add"></a>/shelterneeds : POST
 - popis: Pridanie novej potreby útulku
-- požiadavka
+- požiadavka:
+  - HTTP hlavičky (nepovinné): 
+      - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
     {
@@ -720,7 +822,6 @@
     ```
 
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
@@ -745,15 +846,14 @@
 
 #### <a name="route-shelterneeds-toggle"></a>/shelterneeds/{uuid} : POST
 - popis: Zobrazenie / skrytie potreby útulku
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec potreby útulku
 
-- odpoved
-  
-- HTTP kód: 200
+- odpoveď:
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
@@ -777,15 +877,14 @@
 
 #### <a name="route-shelterneeds-delete"></a>/shelterneeds/{uuid} : DELETE
 - popis: Zmazanie potreby útulku
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{uuid}__: Unikátny identifikačný reťazec potreby útulku
 
 - odpoveď:
-  
-- HTTP kód: 200
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
@@ -813,8 +912,10 @@
 
 #### <a name="route-donations-add"></a>/donation : POST
 - popis: Zaznamenanie peňažného príspevku
-- správanie: Položka "donator" nie je potrebná - určuje identifikátor prispievateľa, ak je prihlásený.
-- požiadavka
+- správanie: Položka "donator" nie je potrebná - určuje identifikátor prispievateľa, ak nechce byť anonymný.
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
     {
@@ -824,8 +925,7 @@
     ```
 
 - odpoveď:
-  
-- HTTP kód: 200
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 400
@@ -852,6 +952,9 @@
 
 #### <a name="route-settings-colours-get"></a>/settings/colours : GET
 - popis: Zobrazenie dostupných hodnôt pre farbu srsti mačky
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
 
 - odpoveď:
   - HTTP kód: 200
@@ -881,9 +984,8 @@
 #### <a name="route-settings-colours-add"></a>/settings/colours : POST
 - popis: Pridanie hodnoty pre farbu srsti
 
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -924,15 +1026,14 @@
 #### <a name="route-settings-colours-delete"></a>/settings/colours/{id} : DELETE
 - popis: Odstránenie hodnoty pre farbu srsti
 
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{id}__: Unikátny identifikátor farby
 
 - odpoveď:
-  
-- HTTP kód: 200
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
@@ -947,6 +1048,9 @@
 
 #### <a name="route-settings-breeds-get"></a>/settings/breeds : GET
 - popis: Zobrazenie dostupných hodnôt pre plemeno mačky
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
 
 - odpoveď:
   - HTTP kód: 200
@@ -976,9 +1080,8 @@
 #### <a name="route-settings-breeds-add"></a>/settings/breeds : POST
 - popis: Pridanie hodnoty pre plemeno
 
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -1019,15 +1122,14 @@
 #### <a name="route-settings-breeds-delete"></a>/settings/breeds/{id} : DELETE
 - popis: Odstránenie hodnoty pre plemeno
 
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{id}__: Unikátny identifikátor plemena
 
 - odpoveď:
-  
-- HTTP kód: 200
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
@@ -1042,6 +1144,9 @@
 
 #### <a name="route-settings-healthstatus-get"></a>/settings/healthstatus : GET
 - popis: Zobrazenie dostupných hodnôt pre zdravotný stav mačky
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
 
 - odpoveď:
   - HTTP kód: 200
@@ -1071,9 +1176,8 @@
 #### <a name="route-settings-healthstatus-add"></a>/settings/healthstatus : POST
 - popis: Pridanie hodnoty pre zdravotný stav
 
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
@@ -1114,15 +1218,14 @@
 #### <a name="route-settings-healthstatus-delete"></a>/settings/healthstatus/{id} : DELETE
 - popis: Odstránenie hodnoty pre zdravotný stav
 
-- požiadavka
+- požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
     - __{id}__: Unikátny identifikátor zdravotného stavu
 
 - odpoveď:
-  
-- HTTP kód: 200
+  - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
