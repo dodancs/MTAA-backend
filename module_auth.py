@@ -1,4 +1,4 @@
-from flask import request, jsonify, escape
+from flask import request, jsonify
 from flask_jwt_extended import (
     jwt_required, create_access_token,
     get_jwt_identity, get_raw_jwt
@@ -8,7 +8,7 @@ import json
 import peewee
 import os
 
-from helpers import Response, MakeHash, ConvertImage
+from helpers import Response, MakeHash, ConvertImage, Sanitize
 import models
 
 from __main__ import app, Config, blacklist
@@ -26,35 +26,37 @@ def auth_login():
         return Response('not_json')
 
     if not email:
-        return jsonify({"error": "E-mailová adresa nebola zadaná"}), 400
+        return jsonify({'error': 'E-mailová adresa nebola zadaná'}), 400
     if not password:
-        return jsonify({"error": "Heslo nebolo zadané"}), 400
+        return jsonify({'error': 'Heslo nebolo zadané'}), 400
+
+    if not isinstance(email, str) or not isinstance(password, str):
+        return Response('invalid_format')
 
     # Try to get user by provided email
     try:
-        match = models.User.get(models.User.email ==
-                                str(escape(email)).strip())
+        match = models.User.get(models.User.email == Sanitize(email))
     except peewee.DoesNotExist:
-        return jsonify({"error": "Používateľ neexistuje"}), 400
+        return jsonify({'error': 'Používateľ neexistuje'}), 400
     except:
         return Response('server_error')
 
     if not match.activated:
-        return jsonify({"error": "Účet nie je aktivovaný"}), 400
+        return jsonify({'error': 'Účet nie je aktivovaný'}), 400
 
     # Compare password hashes
     salt = bytes.fromhex(match.password[:(Config['hash_salt_length']*2)])
-    if match.password == MakeHash(str(escape(password)).strip(), salt):
+    if match.password == MakeHash(Sanitize(password), salt):
         token = create_access_token(identity=match.uuid)
         return jsonify({
-            "token": token,
-            "token_type": app.config['JWT_HEADER_TYPE'],
-            "expires": Config['jwt_expires'],
-            "uuid": match.uuid,
-            "admin": True if match.admin else False
+            'token': token,
+            'token_type': app.config['JWT_HEADER_TYPE'],
+            'expires': Config['jwt_expires'],
+            'uuid': match.uuid,
+            'admin': True if match.admin else False
         })
     else:
-        return jsonify({"error": "Nesprávne heslo"}), 400
+        return jsonify({'error': 'Nesprávne heslo'}), 400
 
 
 @app.route('/auth/logout', methods=['GET'])
@@ -81,39 +83,41 @@ def auth_register():
         return Response('not_json')
 
     if not email:
-        return jsonify({"error": "E-mailová adresa nebola zadaná"}), 400
+        return jsonify({'error': 'E-mailová adresa nebola zadaná'}), 400
     if not password:
-        return jsonify({"error": "Heslo nebolo zadané"}), 400
+        return jsonify({'error': 'Heslo nebolo zadané'}), 400
     if not firstname:
-        return jsonify({"error": "Meno nebolo zadané"}), 400
+        return jsonify({'error': 'Meno nebolo zadané'}), 400
     if not lastname:
-        return jsonify({"error": "Priezvisko nebolo zadané"}), 400
+        return jsonify({'error': 'Priezvisko nebolo zadané'}), 400
     if not picture:
         picture = Config['default_picture']
 
-    picture = str(escape(picture)).strip()
-    result = ConvertImage(picture, Config['avatar_width'], Config['avatar_height'])
+    if not isinstance(email, str) or not isinstance(password, str):
+        return Response('invalid_format')
 
-    if not result:
-        return Response('invalid_image')
+    try:
+        models.Picture.get(models.Picture.uuid == picture)
+    except peewee.DoesNotExist:
+        return jsonify({'error': 'Obrázok neexistuje'}), 400
+    except:
+        return Response('server_error')
 
     hashed_password = MakeHash(
-        str(escape(password)).strip(), os.urandom(Config['hash_salt_length']))
+        Sanitize(password), os.urandom(Config['hash_salt_length']))
 
-    iid = uuid.uuid4()
-
-    user = models.User(uuid=iid, email=str(escape(email)).strip(), password=hashed_password,
-                       firstname=str(escape(firstname)).strip(), lastname=str(escape(lastname)).strip(), picture=result)
+    user = models.User(uuid=uuid.uuid4(), email=Sanitize(email), password=hashed_password,
+                       firstname=Sanitize(firstname), lastname=Sanitize(lastname), picture=picture)
 
     try:
         user.save()
     except peewee.IntegrityError:
-        return jsonify({"error": "E-mailová adresa už bola použitá"}), 400
+        return jsonify({'error': 'E-mailová adresa už bola použitá'}), 400
     except:
         return Response('server_error')
 
     seed = os.urandom(128).hex()
-    models.Activation(user=iid, seed=seed).save()
+    models.Activation(user=user.uuid, seed=seed).save()
 
     print('Please visit http://127.0.0.1:5000/auth/activate/%s' % seed)
 
@@ -123,8 +127,7 @@ def auth_register():
 @app.route('/auth/activate/<seed>', methods=['GET'])
 def auth_activate(seed):
     try:
-        match = models.Activation.get(models.Activation.seed ==
-                                      str(escape(seed)).strip())
+        match = models.Activation.get(models.Activation.seed == Sanitize(seed))
         user = models.User.get(models.User.uuid == match.user)
         user.activated = True
         user.save()
@@ -155,14 +158,14 @@ def auth_get_users():
     response['users'] = []
     for user in query:
         response['users'].append({
-            "uuid": user.uuid,
-            "email": user.email,
-            "firstname": user.firstname,
-            "lastname": user.lastname,
-            "activated": True if user.activated else False,
-            "admin": True if user.admin else False,
-            "created_at": user.created_at.strftime(Config['date_format']),
-            "updated_at": user.updated_at.strftime(Config['date_format'])
+            'uuid': user.uuid,
+            'email': user.email,
+            'firstname': user.firstname,
+            'lastname': user.lastname,
+            'activated': True if user.activated else False,
+            'admin': True if user.admin else False,
+            'created_at': user.created_at.strftime(Config['date_format']),
+            'updated_at': user.updated_at.strftime(Config['date_format'])
         })
     return jsonify(response), 200
 
@@ -185,23 +188,23 @@ def auth_get_user(uuid):
 
     if uuid == user.uuid or user.admin:
         return jsonify({
-            "uuid": match.uuid,
-            "email": match.email,
-            "firstname": match.firstname,
-            "lastname": match.lastname,
-            "activated": True if match.activated else False,
-            "admin": True if match.admin else False,
-            "donations": match.donations,
-            "picture": match.picture,
-            "created_at": match.created_at.strftime(Config['date_format']),
-            "updated_at": match.updated_at.strftime(Config['date_format'])
+            'uuid': match.uuid,
+            'email': match.email,
+            'firstname': match.firstname,
+            'lastname': match.lastname,
+            'activated': True if match.activated else False,
+            'admin': True if match.admin else False,
+            'donations': match.donations,
+            'picture': match.picture,
+            'created_at': match.created_at.strftime(Config['date_format']),
+            'updated_at': match.updated_at.strftime(Config['date_format'])
         }), 200
     else:
         return jsonify({
-            "uuid": match.uuid,
-            "firstname": match.firstname,
-            "lastname": match.lastname,
-            "picture": match.picture
+            'uuid': match.uuid,
+            'firstname': match.firstname,
+            'lastname': match.lastname,
+            'picture': match.picture
         }), 200
 
 
@@ -237,7 +240,7 @@ def auth_update_user(uuid):
     except:
         return Response('not_json')
 
-    if not email and not password and not firstname and not lastname and not picture and not activated and not admin:
+    if not email and not password and not firstname and not lastname and not picture and activated == None and admin == None:
         return Response('empty')
 
     if admin and not user.admin:
@@ -246,31 +249,32 @@ def auth_update_user(uuid):
         return Response('forbidden')
 
     if email:
-        match.email = str(escape(email)).strip()
+        match.email = Sanitize(email)
     if password:
         salt = bytes.fromhex(match.password[:(Config['hash_salt_length']*2)])
-        match.password = MakeHash(str(escape(password)).strip(), salt)
+        match.password = MakeHash(Sanitize(password), salt)
     if firstname:
-        match.firstname = str(escape(firstname)).strip()
+        match.firstname = Sanitize(firstname)
     if lastname:
-        match.lastname = str(escape(lastname)).strip()
+        match.lastname = Sanitize(lastname)
     if picture:
-        picture = str(escape(picture)).strip()
-        result = ConvertImage(picture, Config['avatar_width'], Config['avatar_height'])
+        try:
+            models.Picture.get(models.Picture.uuid == picture)
+        except peewee.DoesNotExist:
+            return jsonify({'error': 'Obrázok neexistuje'}), 400
+        except:
+            return Response('server_error')
 
-        if not result:
-            return Response('invalid_image')
-
-        match.picture = result
-    if activated:
+        match.picture = picture
+    if activated != None:
         match.activated = True if activated else False
-    if admin:
+    if admin != None:
         match.admin = True if admin else False
 
     try:
         match.save()
     except peewee.IntegrityError:
-        return jsonify({"error": "E-mailová adresa už bola použitá"}), 400
+        return jsonify({'error': 'E-mailová adresa už bola použitá'}), 400
     except:
         return Response('server_error')
 

@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, escape
 import hashlib
 import json
 import base64
@@ -30,25 +30,23 @@ def MakeHash(password, salt):
 
 
 # Convert image
-def ConvertImage(picture, width, height):
-    # Try to parse Base64 data
-    try:
-        base64.b64decode(re.sub('^data:image/.+;base64,', '', picture))
-    except:
-        return None
+def ConvertImage(bytes, width, height):
     # Try to parse image
     try:
-        image = Image.open(BytesIO(base64.b64decode(
-            re.sub('^data:image/.+;base64,', '', picture))))
+        image = Image.open(BytesIO(bytes))
     except PIL.UnidentifiedImageError:
         return None
 
-    if image.format not in Config['allowed_image_types']:
+    if image.format not in Config['image_allowed_format']:
         return None
 
     buffer = BytesIO()
-    image.thumbnail((width, height))
-    image.save(buffer, format="PNG")
+    image.thumbnail((width, height), Image.ANTIALIAS)
+    image.save(buffer, format=Config['image_store_format'])
 
-    return bytes(
-        "data:image/png;base64,", encoding='utf-8') + base64.b64encode(buffer.getvalue())
+    return buffer
+
+
+# Sanitize user input
+def Sanitize(string, strip=True):
+    return str(escape(string)).strip() if strip else str(escape(string))

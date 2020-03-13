@@ -13,7 +13,7 @@ class User(BaseModel):
     activated = peewee.BooleanField(default=False)
     admin = peewee.BooleanField(default=False)
     donations = peewee.DoubleField(default=0)
-    picture = peewee.TextField()
+    picture = peewee.CharField(max_length=36)
     created_at = peewee.DateTimeField(default=datetime.datetime.now)
     updated_at = peewee.DateTimeField()
 

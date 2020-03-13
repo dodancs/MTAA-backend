@@ -62,7 +62,7 @@
   - telo požiadavky:
     ```json
     {
-      "email": "user", 
+      "email": "janko@mrkvicka.sk", 
       "password": "hesielko"
     }
     ```
@@ -107,7 +107,7 @@
   - telo požiadavky:
     ```json
     {
-      "email": "user", 
+      "email": "janko@mrkvicka.sk", 
       "password": "hesielko",
       "firstname": "Jano",
       "lastname": "Mrkvička"
@@ -150,7 +150,7 @@
       "users": [
         {
           "uuid": "uuidstring",
-          "email": "user@domain.tld",
+          "email": "janko@mrkvicka.sk",
           "firstname": "Jano",
           "lastname": "Mrkvička",
           "activated": true,
@@ -187,7 +187,7 @@
     ```json
     {
       "uuid": "uuidstring",
-      "email": "user@domain.tld",
+      "email": "janko@mrkvicka.sk",
       "firstname": "Jano",
       "lastname": "Mrkvička",
       "activated": true,
