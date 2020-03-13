@@ -11,6 +11,8 @@
 ## Moduly
 
 - [Autentifikácia](module_auth.py)
+- [Správa mačiek](module_cats.py)
+- [Správa obrázkov](module_pictures.py)
 - [Nastavenia](module_settings.py)
 
 

@@ -186,6 +186,15 @@ def auth_get_user(uuid):
     except:
         return Response('server_error')
 
+    favourites = []
+
+    try:
+        favs = models.Favourite.select().where(models.Favourite.user == user.uuid)
+        for f in favs:
+            favourites.append(f.cat)
+    except:
+        pass
+
     if uuid == user.uuid or user.admin:
         return jsonify({
             'uuid': match.uuid,
@@ -196,6 +205,7 @@ def auth_get_user(uuid):
             'admin': True if match.admin else False,
             'donations': match.donations,
             'picture': match.picture,
+            'favourites': favourites,
             'created_at': match.created_at.strftime(Config['date_format']),
             'updated_at': match.updated_at.strftime(Config['date_format'])
         }), 200

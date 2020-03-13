@@ -194,6 +194,7 @@
       "admin": false,
       "donations": 0,
       "picture": "uuidstring",
+      "favourites": ["cat1uuid", "cat2uuid"],
       "created_at": "2020-02-19 08:46:28",
       "updated_at": "2020-02-19 08:46:28"
     }
