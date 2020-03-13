@@ -56,6 +56,7 @@ def hello_world():
 
 
 import module_auth
+import module_cats
 import module_pictures
 import module_settings
 
