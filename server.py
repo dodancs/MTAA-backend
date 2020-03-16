@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager, get_raw_jwt
 from flask_socketio import SocketIO, send, emit
 import json
@@ -50,18 +50,23 @@ def unauthorized_token_callback(reason):
 socketio = SocketIO(app)
 
 
+@app.errorhandler(405)
+def e495(e):
+    return jsonify({'error': 'Metóda nie je podporovaná'}), 405
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
 
-import module_auth
-import module_cats
-import module_pictures
 import module_settings
+import module_pictures
+import module_cats
+import module_auth
 
 # @socketio.on('connect')
 # def websocketTest():
 #     emit('my response', {'data': 'Connected'})
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
