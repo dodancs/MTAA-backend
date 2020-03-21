@@ -4,5 +4,6 @@
     "forbidden": [{ "error": "Prístup zamietnutý" }, 401],
     "invalid": [{ "error": "Neplatný identifikátor" }, 400],
     "invalid_image": [{ "error": "Nesprávny formát obrázku" }, 400],
-    "invalid_format": [{ "error": "Nesprávny formát dát" }, 400]
+    "invalid_format": [{ "error": "Nesprávny formát dát" }, 400],
+    "invalid_args": [{ "error": "Parametre požiadavky nespĺňajú formát" }, 400]
 }

@@ -45,7 +45,7 @@ def auth_login():
         return jsonify({'error': 'Účet nie je aktivovaný'}), 400
 
     # Compare password hashes
-    salt = bytes.fromhex(match.password[:(Config['hash_salt_length']*2)])
+    salt = bytes.fromhex(match.password[:(Config['hash_salt_length'] * 2)])
     if match.password == MakeHash(Sanitize(password), salt):
         token = create_access_token(identity=match.uuid)
         return jsonify({
@@ -53,7 +53,6 @@ def auth_login():
             'token_type': app.config['JWT_HEADER_TYPE'],
             'expires': Config['jwt_expires'],
             'uuid': match.uuid,
-            'admin': True if match.admin else False
         })
     else:
         return jsonify({'error': 'Nesprávne heslo'}), 400
@@ -138,6 +137,28 @@ def auth_activate(seed):
         return Response('server_error')
 
     return Response('empty')
+
+
+@app.route('/auth/refresh_token', methods=['GET'])
+@jwt_required
+def refresh_token():
+    current_user = get_jwt_identity()
+    try:
+        models.User.get(models.User.uuid == current_user)
+    except:
+        return Response('forbidden')
+
+    # Add old token to blacklist
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+
+    token = create_access_token(identity=current_user)
+    return jsonify({
+        'token': token,
+        'token_type': app.config['JWT_HEADER_TYPE'],
+        'expires': Config['jwt_expires'],
+        'uuid': current_user,
+    })
 
 
 @app.route('/auth/users', methods=['GET'])
@@ -261,7 +282,7 @@ def auth_update_user(uuid):
     if email:
         match.email = Sanitize(email)
     if password:
-        salt = bytes.fromhex(match.password[:(Config['hash_salt_length']*2)])
+        salt = bytes.fromhex(match.password[:(Config['hash_salt_length'] * 2)])
         match.password = MakeHash(Sanitize(password), salt)
     if firstname:
         match.firstname = Sanitize(firstname)

@@ -7,13 +7,13 @@
   - [Odhlásenie](#route-auth-logout)
   - [Registrácia](#route-auth-register)
   - [Aktivácia účtu](#route-auth-activate)
+  - [Obnovenie relácie](#route-auth-refresh)
   - [Zobrazenie všetkých používateľov](#route-auth-getUsers)
   - [Zobrazenie informácií o špecifickom používateľovi](#route-auth-getUser)
   - [Úprava používateľa](#route-auth-updateUser)
   - [Zmazanie používateľa](#route-auth-deleteUser)
 - [Správa mačiek](#route-cats)
-  - [Zorbazenie mačiek](#route-cats-getAll)
-  - [Zobrazenie detailu mačky](#route-cats-get)
+  - [Zorbazenie mačiek](#route-cats-get)
   - [Pridanie mačky](#route-cats-add)
   - [Úprava mačky](#route-cats-update)
   - [Zmazanie mačky](#route-cats-delete)
@@ -51,6 +51,7 @@
 - [Odhlásenie](#route-auth-logout)
 - [Registrácia](#route-auth-register)
 - [Aktivácia účtu](#route-auth-activate)
+- [Obnovenie relácie](#route-auth-refresh)
 - [Zobrazenie všetkých používateľov](#route-auth-getUsers)
 - [Zobrazenie informácií o špecifickom používateľovi](#route-auth-getUser)
 - [Úprava používateľa](#route-auth-updateUser)
@@ -75,16 +76,15 @@
       "token": "JWT_ACCESSTOKEN", 
       "token_type": "bearer", 
       "expires": 3600,
-      "uuid": "uuidstring", 
-      "admin": true
+      "uuid": "uuidstring"
     }
     ```
   
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Zlé prihlasovacie údaje..."
     }
     ```
@@ -96,6 +96,8 @@
 - požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
+
+
 - odpoveď:
   - HTTP kód: 200
 
@@ -110,7 +112,8 @@
       "email": "janko@mrkvicka.sk", 
       "password": "hesielko",
       "firstname": "Jano",
-      "lastname": "Mrkvička"
+      "lastname": "Mrkvička",
+      "picture": "pictureuuidstring"
     }
     ```
 
@@ -120,8 +123,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "E-mailová adresa už bola použitá..."
     }
     ```
@@ -132,6 +135,23 @@
 - popis: Aktivácia používateľského účtu
 - odpoveď:
   - HTTP kód: 200
+
+-----------
+
+#### <a name="route-auth-refresh"></a>/auth/refresh_token : GET
+- popis: Obnovenie používateľskej relácie
+- odpoveď:
+  - HTTP kód: 200
+
+
+- odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+    ```json
+    {
+      "error": "Prístup zamietnutý..."
+    }
+    ```
   
 -----------
 
@@ -165,8 +185,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -203,8 +223,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -212,8 +232,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -224,10 +244,8 @@
 - popis: Úprava používateľa
 - požiadavka:
   - HTTP hlavičky: 
-    
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
-    
     - __{uuid}__: Unikátny identifikačný reťazec používateľa
   - telo požiadavky:
     ```json
@@ -242,8 +260,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -251,8 +269,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -273,8 +291,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -282,8 +300,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -292,8 +310,7 @@
 -----------
 
 ### <a name="route-cats"></a>Správa mačiek
-- [Zorbazenie mačiek](#route-cats-getAll)
-- [Zobrazenie detailu mačky](#route-cats-get)
+- [Zorbazenie mačiek](#route-cats-get)
 - [Pridanie mačky](#route-cats-add)
 - [Úprava mačky](#route-cats-update)
 - [Zmazanie mačky](#route-cats-delete)
@@ -301,25 +318,37 @@
 - [Pridanie do obľúbených](#route-cats-like)
 - [Odobratie z obľúbených](#route-cats-unlike)
 
-#### <a name="route-cats-getAll"></a>/cats : GET
+#### <a name="route-cats-get"></a>/cats : GET
 - popis: Zobrazenie všetkých mačiek
 - požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
+  - GET parametre (voliteľné):
+    - Limitácia počtu výsledkov: `limit=10`
+    - Aktuálna stránka: `page=3`
 
 - odpoveď:
   - HTTP kód: 200
   - telo odpovede:
     ```json
     {
-      "count": 71,
+      "total": 3421,
+      "page": 1,
+      "count": 10,
       "cats": [
         {
           "uuid": "uuidstring",
           "name": "Micka", 
           "age": 3,
           "sex": true,
+          "breed": 0,
+          "health_status": 3,
+          "castrated": false,
+          "vaccinated": true,
+          "dewormed": true,
+          "colour": 7,
           "desctiption": "Toto je moje zlaticko..",
+          "health_log": "Problemy u veterinara nikdy neboli...",
           "adoptive": true,
           "pictures": [
             "uuidstring1",
@@ -330,38 +359,12 @@
     }
     ```
 
------------
-
-#### <a name="route-cats-get"></a>/cats/{uuid} : GET
-- popis: Zobrazenie detailu mačky
-- požiadavka:
-  - HTTP hlavičky: 
-    - `Authentication: "bearer JWT_ACCESSTOKEN"`
-  - parametre:
-    - __{uuid}__: Unikátny identifikačný reťazec mačky
-
 - odpoveď:
-  - HTTP kód: 200
-  - telo odpovede:
+  - HTTP kód: 401
+  - telo odpovede: 
     ```json
     {
-      "uuid": "uuidstring",
-      "name": "Micka", 
-      "age": 3,
-      "sex": true,
-      "breed": 0,
-      "health_status": 3,
-      "castrated": false,
-      "vaccinated": true,
-      "dewormed": true,
-      "colour": 7,
-      "desctiption": "Toto je moje zlaticko..",
-      "health_log": "Problemy u veterinara nikdy neboli...",
-      "adoptive": true,
-      "pictures": [
-        "uuidstring1",
-        "uuidstring2"
-      ]
+      "error": "Prístup zamietnutý..."
     }
     ```
 
@@ -406,8 +409,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -435,14 +438,13 @@
     ```
   
 - odpoveď:
-  
   - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -450,8 +452,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -472,8 +474,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -481,8 +483,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -503,8 +505,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -512,8 +514,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Mačku nie je možné adoptovať..."
     }
     ```
@@ -534,8 +536,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -556,8 +558,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -587,8 +589,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -596,8 +598,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -609,7 +611,8 @@
 - požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
-    - `Content-type: multipart/form-data`
+    - `Content-type: image/jpg`
+    - `Content-length: 45677834`
   - telo požiadavky: `binarne data`
 
 - odpoveď:
@@ -624,8 +627,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -642,12 +645,12 @@
 
 - odpoveď:
   - HTTP kód: 200
-
+  
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -655,8 +658,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -698,8 +701,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -719,7 +722,7 @@
       "author": "uuidstring", 
       "cat": "uuidstring", 
       "text": "Tá je úplne krásna! 😍"
-  }
+    }
     ```
   
 - odpoveď:
@@ -728,8 +731,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -737,8 +740,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -759,8 +762,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -768,8 +771,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -813,7 +816,7 @@
 - popis: Pridanie novej potreby útulku
 - požiadavka:
   - HTTP hlavičky (nepovinné): 
-      - `Authentication: "bearer JWT_ACCESSTOKEN"`
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - telo požiadavky:
     ```json
     {
@@ -821,15 +824,15 @@
       "details": "Granule suchého typu, preferovane od značiek Whiskas."
     }
     ```
-
+  
 - odpoveď:
   - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -837,8 +840,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -859,8 +862,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -868,8 +871,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -890,8 +893,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -899,8 +902,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Neplatný identifikátor..."
     }
     ```
@@ -924,15 +927,15 @@
       "amount": 15.25
     }
     ```
-
+  
 - odpoveď:
   - HTTP kód: 200
   
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -1007,8 +1010,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -1016,8 +1019,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -1039,8 +1042,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -1103,8 +1106,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -1112,8 +1115,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -1135,8 +1138,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -1199,8 +1202,8 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
@@ -1208,8 +1211,8 @@
 - odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Nesprávne zadané údaje..."
     }
     ```
@@ -1231,8 +1234,9 @@
 - odpoveď:
   - HTTP kód: 401
   - telo odpovede: 
-	  ```json
-	  {
+    ```json
+    {
       "error": "Prístup zamietnutý..."
     }
     ```
+    

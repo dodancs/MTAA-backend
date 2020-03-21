@@ -23,9 +23,34 @@ def cats_get_all():
     except:
         return Response('forbidden')
 
-    query = models.Cat.select()
+    limit = 5
+    page = 1
+
+    if 'limit' in request.args.keys() and 'page' in request.args.keys():
+        try:
+            limit = int(request.args.get('limit'))
+            page = int(request.args.get('page'))
+        except:
+            return Response('invalid_args')
+    elif 'limit' in request.args.keys():
+        try:
+            limit = int(request.args.get('limit'))
+        except:
+            return Response('invalid_args')
+    elif 'page' in request.args.keys():
+        try:
+            page = int(request.args.get('page'))
+        except:
+            return Response('invalid_args')
+
+    if not page:
+        page = 1
+
+    query = models.Cat.select().paginate(page, paginate_by=limit)
     response = {}
+    response['total'] = len(models.Cat.select())
     response['count'] = len(query)
+    response['page'] = int(page)
     response['cats'] = []
     for cat in query:
         response['cats'].append({
@@ -33,49 +58,20 @@ def cats_get_all():
             "name": cat.name,
             "age": cat.age,
             "sex": True if cat.sex else False,
+            "breed": cat.breed,
+            "health_status": cat.health_status,
+            "castrated": True if cat.castrated else False,
+            "vaccinated": True if cat.vaccinated else False,
+            "dewormed": True if cat.dewormed else False,
+            "colour": cat.colour,
             "description": cat.description,
+            "health_log": cat.health_log,
             "adoptive": True if cat.adoptive else False,
             "pictures": json.loads(cat.pictures),
             "created_at": cat.created_at.strftime(Config['date_format']),
             "updated_at": cat.updated_at.strftime(Config['date_format'])
         })
     return jsonify(response), 200
-
-
-@app.route('/cats/<uuid>', methods=['GET'])
-@jwt_required
-def cats_get(uuid):
-    current_user = get_jwt_identity()
-    try:
-        user = models.User.get(models.User.uuid == current_user)
-    except:
-        return Response('forbidden')
-
-    try:
-        match = models.Cat.get(models.Cat.uuid == uuid)
-    except peewee.DoesNotExist:
-        return Response('invalid')
-    except:
-        return Response('server_error')
-
-    return jsonify({
-        "uuid": match.uuid,
-        "name": match.name,
-        "age": match.age,
-        "sex": True if match.sex else False,
-        "breed": match.breed,
-        "health_status": match.health_status,
-        "castrated": True if match.castrated else False,
-        "vaccinated": True if match.vaccinated else False,
-        "dewormed": True if match.dewormed else False,
-        "colour": match.colour,
-        "description": match.description,
-        "health_log": match.health_log,
-        "adoptive": True if match.adoptive else False,
-        "pictures": json.loads(match.pictures),
-        "created_at": match.created_at.strftime(Config['date_format']),
-        "updated_at": match.updated_at.strftime(Config['date_format'])
-    }), 200
 
 
 @app.route('/cats', methods=['POST'])
@@ -324,7 +320,7 @@ def cats_delete(uuid):
 
     if not user.admin:
         return Response('forbidden')
-    
+
     try:
         match = models.Cat.get(models.Cat.uuid == uuid)
     except peewee.DoesNotExist:
@@ -370,7 +366,7 @@ def cats_adopt(uuid):
 
     return Response('empty')
 
-    
+
 @app.route('/cats/<uuid>/like', methods=['POST'])
 @jwt_required
 def cats_like(uuid):
@@ -388,7 +384,8 @@ def cats_like(uuid):
         return Response('server_error')
 
     try:
-        models.Favourite.get(models.Favourite.user == user.uuid and models.Favourite.cat == uuid)
+        models.Favourite.get(models.Favourite.user ==
+                             user.uuid and models.Favourite.cat == uuid)
     except peewee.DoesNotExist:
         favourite = models.Favourite(user=user.uuid, cat=uuid)
         favourite.save()
@@ -397,7 +394,7 @@ def cats_like(uuid):
 
     return Response('empty')
 
-    
+
 @app.route('/cats/<uuid>/unlike', methods=['POST'])
 @jwt_required
 def cats_unlike(uuid):
@@ -415,7 +412,8 @@ def cats_unlike(uuid):
         return Response('server_error')
 
     try:
-        favourite = models.Favourite.get(models.Favourite.user == user.uuid and models.Favourite.cat == uuid)
+        favourite = models.Favourite.get(
+            models.Favourite.user == user.uuid and models.Favourite.cat == uuid)
         favourite.delete_instance()
     except peewee.DoesNotExist:
         return Response('empty')
