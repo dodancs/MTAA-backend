@@ -3,6 +3,8 @@ from flask_jwt_extended import (
     jwt_required, create_access_token,
     get_jwt_identity, get_raw_jwt
 )
+import operator
+from functools import reduce
 import uuid
 import json
 import peewee
@@ -17,38 +19,162 @@ from __main__ import app, Config, blacklist
 @app.route('/cats', methods=['GET'])
 @jwt_required
 def cats_get_all():
+    # get current user
     current_user = get_jwt_identity()
     try:
-        user = models.User.get(models.User.uuid == current_user)
+        # if user does not exist in DB, forbidden
+        models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
 
+    # default values for page size and current page
     limit = 5
     page = 1
 
-    if 'limit' in request.args.keys() and 'page' in request.args.keys():
+    # dictionary for filters + default values
+    f = dict()
+    f['adoptive'] = None
+    f['sex'] = None
+    f['breed'] = None
+    f['health_status'] = None
+    f['age_up'] = None
+    f['age_down'] = None
+    f['colour'] = None
+    f['castrated'] = None
+    f['vaccinated'] = None
+    f['dewormed'] = None
+
+    # if limit is specified
+    if 'limit' in request.args.keys():
         try:
             limit = int(request.args.get('limit'))
-            page = int(request.args.get('page'))
         except:
             return Response('invalid_args')
-    elif 'limit' in request.args.keys():
-        try:
-            limit = int(request.args.get('limit'))
-        except:
-            return Response('invalid_args')
-    elif 'page' in request.args.keys():
+    # if current page is specified
+    if 'page' in request.args.keys():
         try:
             page = int(request.args.get('page'))
         except:
             return Response('invalid_args')
 
-    if not page:
+    # if page is zero or less, turn it into a one
+    if page < 1:
         page = 1
 
-    query = models.Cat.select().paginate(page, paginate_by=limit)
+    # if adoptive is specified
+    if 'adoptive' in request.args.keys():
+        if str(request.args.get('adoptive')) not in ('true', 'false'):
+            return Response('invalid_args')
+        f['adoptive'] = True if str(
+            request.args.get('adoptive')) == 'true' else False
+
+    # if sex is specified
+    if 'sex' in request.args.keys():
+        if str(request.args.get('sex')) not in ('true', 'false'):
+            return Response('invalid_args')
+        f['sex'] = True if str(request.args.get('sex')) == 'true' else False
+
+    # if breed is specified
+    if 'breed' in request.args.keys():
+        try:
+            f['breed'] = int(request.args.get('breed'))
+        except:
+            return Response('invalid_args')
+        try:
+            models.Breed.get(models.Breed.id == f['breed'])
+        except:
+            return Response('invalid_args')
+
+    # if health status is specified
+    if 'health_status' in request.args.keys():
+        try:
+            f['health_status'] = int(request.args.get('health_status'))
+        except:
+            return Response('invalid_args')
+        try:
+            models.HealthStatus.get(
+                models.HealthStatus.id == f['health_status'])
+        except:
+            return Response('invalid_args')
+
+    # if age upper limit is specified
+    if 'age_up' in request.args.keys():
+        try:
+            f['age_up'] = int(request.args.get('age_up'))
+        except:
+            return Response('invalid_args')
+
+    # if age lower limit is specified
+    if 'age_down' in request.args.keys():
+        try:
+            f['age_down'] = int(request.args.get('age_down'))
+        except:
+            return Response('invalid_args')
+
+    # if colour is specified
+    if 'colour' in request.args.keys():
+        try:
+            f['colour'] = int(request.args.get('colour'))
+        except:
+            return Response('invalid_args')
+        try:
+            models.Colour.get(
+                models.Colour.id == f['colour'])
+        except:
+            return Response('invalid_args')
+
+    # if castration is specified
+    if 'castrated' in request.args.keys():
+        if str(request.args.get('castrated')) not in ('true', 'false'):
+            return Response('invalid_args')
+        f['castrated'] = True if str(request.args.get(
+            'castrated')) == 'true' else False
+
+    # if vaccination is specified
+    if 'vaccinated' in request.args.keys():
+        if str(request.args.get('vaccinated')) not in ('true', 'false'):
+            return Response('invalid_args')
+        f['vaccinated'] = True if str(request.args.get(
+            'vaccinated')) == 'true' else False
+
+    # if dewormation is specified
+    if 'dewormed' in request.args.keys():
+        if str(request.args.get('dewormed')) not in ('true', 'false'):
+            return Response('invalid_args')
+        f['dewormed'] = True if str(request.args.get(
+            'dewormed')) == 'true' else False
+
+    # building the query condition list
+    expr_list = []
+    for key in f.keys():
+        if f[key] is not None:
+            if key == 'adoptive':
+                expr_list.append(models.Cat.adoptive == f[key])
+            if key == 'sex':
+                expr_list.append(models.Cat.sex == f[key])
+            if key == 'breed':
+                expr_list.append(models.Cat.breed == f[key])
+            if key == 'health_status':
+                expr_list.append(models.Cat.health_status == f[key])
+            if key == 'age_up':
+                expr_list.append(models.Cat.age <= f[key])
+            if key == 'age_down':
+                expr_list.append(models.Cat.age >= f[key])
+            if key == 'colour':
+                expr_list.append(models.Cat.colour == f[key])
+            if key == 'castrated':
+                expr_list.append(models.Cat.castrated == f[key])
+            if key == 'vaccinated':
+                expr_list.append(models.Cat.vaccinated == f[key])
+            if key == 'dewormed':
+                expr_list.append(models.Cat.dewormed == f[key])
+
+    allCats = models.Cat.select()
+    # if any filters were set, use the where query
+    query = allCats.where(reduce(operator.and_, expr_list)
+                          ).paginate(page, paginate_by=limit) if expr_list else allCats.paginate(page, paginate_by=limit)
     response = {}
-    response['total'] = len(models.Cat.select())
+    response['total'] = len(allCats)
     response['count'] = len(query)
     response['page'] = int(page)
     response['cats'] = []
@@ -77,8 +203,10 @@ def cats_get_all():
 @app.route('/cats', methods=['POST'])
 @jwt_required
 def cats_add():
+    # get current user
     current_user = get_jwt_identity()
     try:
+        # if user does not exist in DB, forbidden
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
@@ -178,8 +306,10 @@ def cats_add():
 @app.route('/cats/<uuid>', methods=['PUT'])
 @jwt_required
 def cats_update(uuid):
+    # get current user
     current_user = get_jwt_identity()
     try:
+        # if user does not exist in DB, forbidden
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
@@ -312,8 +442,10 @@ def cats_update(uuid):
 @app.route('/cats/<uuid>', methods=['DELETE'])
 @jwt_required
 def cats_delete(uuid):
+    # get current user
     current_user = get_jwt_identity()
     try:
+        # if user does not exist in DB, forbidden
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
@@ -336,8 +468,10 @@ def cats_delete(uuid):
 @app.route('/cats/<uuid>/adopt', methods=['POST'])
 @jwt_required
 def cats_adopt(uuid):
+    # get current user
     current_user = get_jwt_identity()
     try:
+        # if user does not exist in DB, forbidden
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
@@ -370,9 +504,11 @@ def cats_adopt(uuid):
 @app.route('/cats/<uuid>/like', methods=['POST'])
 @jwt_required
 def cats_like(uuid):
+    # get current user
     current_user = get_jwt_identity()
     try:
-        user = models.User.get(models.User.uuid == current_user)
+        # if user does not exist in DB, forbidden
+        models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
 
@@ -398,9 +534,11 @@ def cats_like(uuid):
 @app.route('/cats/<uuid>/unlike', methods=['POST'])
 @jwt_required
 def cats_unlike(uuid):
+    # get current user
     current_user = get_jwt_identity()
     try:
-        user = models.User.get(models.User.uuid == current_user)
+        # if user does not exist in DB, forbidden
+        models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
 

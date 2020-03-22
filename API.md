@@ -105,6 +105,7 @@
 
 #### <a name="route-auth-register"></a>/auth/register : POST
 - popis: Registrácia nového používateľa
+- správanie: V prípade, že nie je špecifikovaný obrázok je používateľovi nastavený všeobecný predvolený obrázok.
 - požiadavka:
   - telo požiadavky:
     ```json
@@ -140,9 +141,21 @@
 
 #### <a name="route-auth-refresh"></a>/auth/refresh_token : GET
 - popis: Obnovenie používateľskej relácie
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
+
 - odpoveď:
   - HTTP kód: 200
-
+  - telo odpovede:
+    ```json
+    {
+      "token": "JWT_ACCESSTOKEN", 
+      "token_type": "bearer", 
+      "expires": 3600,
+      "uuid": "uuidstring"
+    }
+    ```
 
 - odpoveď:
   - HTTP kód: 401
@@ -326,6 +339,16 @@
   - GET parametre (voliteľné):
     - Limitácia počtu výsledkov: `limit=10`
     - Aktuálna stránka: `page=3`
+    - Filter: adoptovateľná: `adoptive=true`
+    - Filter: pohlavie: `sex=true`
+    - Filter: plemeno: `breed=1`
+    - Filter: zdravotný stav: `health_statu=1`
+    - Filter: maximálny vek: `age_up=30`
+    - Filter: minimálny vek: `age_down=10`
+    - Filter: farba srsti: `colour=7`
+    - Filter: kastrovaná: `castrated=false`
+    - Filter: očkovaná: `vaccinated=true`
+    - Filter: odčervená: `dewormed=true`
 
 - odpoveď:
   - HTTP kód: 200
@@ -333,7 +356,7 @@
     ```json
     {
       "total": 3421,
-      "page": 1,
+      "page": 3,
       "count": 10,
       "cats": [
         {
@@ -341,7 +364,7 @@
           "name": "Micka", 
           "age": 3,
           "sex": true,
-          "breed": 0,
+          "breed": 1,
           "health_status": 3,
           "castrated": false,
           "vaccinated": true,
@@ -381,7 +404,7 @@
       "name": "Micka", 
       "age": 3,
       "sex": true,
-      "breed": 0,
+      "breed": 1,
       "health_status": 3,
       "castrated": false,
       "vaccinated": true,
@@ -1239,4 +1262,3 @@
       "error": "Prístup zamietnutý..."
     }
     ```
-    
