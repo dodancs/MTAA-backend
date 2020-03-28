@@ -10,7 +10,7 @@ import json
 import peewee
 import os
 
-from helpers import Response, MakeHash, ConvertImage, Sanitize
+from helpers import Response, ConvertImage, Sanitize
 import models
 
 from __main__ import app, Config, blacklist
@@ -508,7 +508,7 @@ def cats_like(uuid):
     current_user = get_jwt_identity()
     try:
         # if user does not exist in DB, forbidden
-        models.User.get(models.User.uuid == current_user)
+        user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
 
@@ -538,7 +538,7 @@ def cats_unlike(uuid):
     current_user = get_jwt_identity()
     try:
         # if user does not exist in DB, forbidden
-        models.User.get(models.User.uuid == current_user)
+        user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
 

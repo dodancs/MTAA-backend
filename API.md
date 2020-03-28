@@ -722,6 +722,15 @@
     ```
 
 - odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+    ```json
+    {
+      "error": "Prístup zamietnutý..."
+    }
+    ```
+
+- odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
     ```json
@@ -742,8 +751,6 @@
   - telo požiadavky:
     ```json
     {
-      "author": "uuidstring", 
-      "cat": "uuidstring", 
       "text": "Tá je úplne krásna! 😍"
     }
     ```

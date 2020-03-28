@@ -6,3 +6,4 @@ from models.Breed import Breed
 from models.HealthStatus import HealthStatus
 from models.Cat import Cat
 from models.Favourite import Favourite
+from models.Comment import Comment

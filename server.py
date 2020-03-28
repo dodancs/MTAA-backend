@@ -64,10 +64,11 @@ import module_settings
 import module_pictures
 import module_cats
 import module_auth
+import module_comments
 
 # @socketio.on('connect')
 # def websocketTest():
 #     emit('my response', {'data': 'Connected'})
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
-    # socketio.run(app, host='0.0.0.0', debug=True)
+    # app.run(host='0.0.0.0')
+    socketio.run(app, host='0.0.0.0', debug=True)

@@ -18,7 +18,7 @@ class Cat(BaseModel):
     description = peewee.TextField()
     health_log = peewee.TextField()
     adoptive = peewee.BooleanField()
-    adopted_by = peewee.CharField(unique=True, index=True, max_length=36, null=True)
+    adopted_by = peewee.CharField(index=True, max_length=36, null=True)
     pictures = peewee.TextField()
     created_at = peewee.DateTimeField(default=datetime.datetime.now)
     updated_at = peewee.DateTimeField()
