@@ -14,6 +14,9 @@
 - [Správa mačiek](module_cats.py)
 - [Správa obrázkov](module_pictures.py)
 - [Nastavenia](module_settings.py)
+- [Správa komentárov](module_comments.py)
+- [Správa potrieb útulku](module_shelterneeds.py)
+- [Peňažné príspevky](module_donations.py)
 
 
 
