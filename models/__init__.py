@@ -8,3 +8,4 @@ from models.Cat import Cat
 from models.Favourite import Favourite
 from models.Comment import Comment
 from models.ShelterNeeds import ShelterNeeds
+from models.Donation import Donation

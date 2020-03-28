@@ -208,11 +208,19 @@ def auth_get_user(uuid):
         return Response('server_error')
 
     favourites = []
+    donations = 0
 
     try:
         favs = models.Favourite.select().where(models.Favourite.user == user.uuid)
         for f in favs:
             favourites.append(f.cat)
+    except:
+        pass
+
+    try:
+        donats = models.Donation.select().where(models.Donation.donator == user.uuid)
+        for d in donats:
+            donations += d.amount
     except:
         pass
 
@@ -224,7 +232,7 @@ def auth_get_user(uuid):
             'lastname': match.lastname,
             'activated': True if match.activated else False,
             'admin': True if match.admin else False,
-            'donations': match.donations,
+            'donations': donations,
             'picture': match.picture,
             'favourites': favourites,
             'created_at': match.created_at.strftime(Config['date_format']),
