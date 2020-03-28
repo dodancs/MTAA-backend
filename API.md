@@ -832,11 +832,21 @@
       "shelterneeds": [
         {
           "uuid": "uuidstring",
+          "category": "Krmivo", 
           "name": "Suché granule", 
           "details": "Granule suchého typu, preferovane od značiek Whiskas.", 
           "hide": false
         }
       ]
+    }
+    ```
+
+- odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+    ```json
+    {
+      "error": "Prístup zamietnutý..."
     }
     ```
 
@@ -850,6 +860,7 @@
   - telo požiadavky:
     ```json
     {
+      "category": "Krmivo",
       "name": "Suché granule",
       "details": "Granule suchého typu, preferovane od značiek Whiskas."
     }

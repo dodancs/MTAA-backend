@@ -65,6 +65,7 @@ import module_pictures
 import module_cats
 import module_auth
 import module_comments
+import module_shelterneeds
 
 # @socketio.on('connect')
 # def websocketTest():
