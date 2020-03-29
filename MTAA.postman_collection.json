@@ -1,0 +1,1086 @@
+{
+	"info": {
+		"_postman_id": "d751ee8d-8484-4c13-a8ec-47e91a145e25",
+		"name": "MTAA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/auth/register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"test@domain.tld\",\n\t\"password\": \"test\",\n\t\"firstname\": \"Test\",\n\t\"lastname\": \"User\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9f9099f-8d7c-47df-8bcd-a77e6f21f241",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", jsonData.token);",
+							"postman.setEnvironmentVariable(\"token_type\", jsonData.token_type);",
+							"postman.setEnvironmentVariable(\"uuid\", jsonData.uuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"dodancs@moow.info\",\n\t\"password\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/logout",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token_type}} {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/refresh_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9f9099f-8d7c-47df-8bcd-a77e6f21f241",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", jsonData.token);",
+							"postman.setEnvironmentVariable(\"token_type\", jsonData.token_type);",
+							"postman.setEnvironmentVariable(\"uuid\", jsonData.uuid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/refresh_token",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"refresh_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token_type}} {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/users/me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d2f9739-afa5-40d0-8eb6-6afd1c2ac04c",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"picture\", jsonData.picture);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/users/{{uuid}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"users",
+						"{{uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/users/me",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"picture\": \"15b05f29-1434-456a-ac6d-b7d30959587e\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/users/{{uuid}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"users",
+						"{{uuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/users/test",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/users/6d02b845-9842-45a6-91f2-c1c8c49fb679",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"users",
+						"6d02b845-9842-45a6-91f2-c1c8c49fb679"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/users/test",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/users/f8f2e3c7-f828-4a69-b147-440b38fda35a",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"users",
+						"f8f2e3c7-f828-4a69-b147-440b38fda35a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/cats?limit=10&page=1&adoptive=false",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cats"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "adoptive",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Micka\",\n\t\"age\": 33,\n\t\"sex\": true,\n\t\"breed\": 1,\n\t\"health_status\": 1,\n\t\"colour\": 1,\n\t\"description\": \"Vcera sme ju nasli pod mostom.\",\n\t\"pictures\": [\"15b05f29-1434-456a-ac6d-b7d30959587e\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/cats",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\": \"Moj milacik!\",\n\t\"pictures\": [\"15b05f29-1434-456a-ac6d-b7d30959587e\", \"9995f6fe-3bea-48d1-ab06-48948446593c\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/cats/d7cf0ede-63b3-4910-99b2-fa5c46a30df4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cats",
+						"d7cf0ede-63b3-4910-99b2-fa5c46a30df4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats/my/like",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/cats/d7cf0ede-63b3-4910-99b2-fa5c46a30df4/like",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cats",
+						"d7cf0ede-63b3-4910-99b2-fa5c46a30df4",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cats/my/unlike",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/cats/d7cf0ede-63b3-4910-99b2-fa5c46a30df4/unlike",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cats",
+						"d7cf0ede-63b3-4910-99b2-fa5c46a30df4",
+						"unlike"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/pictures/my",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/pictures/{{picture}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"pictures",
+						"{{picture}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/pictures/test",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/pictures/9995f6fe-3bea-48d1-ab06-48948446593c",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"pictures",
+						"9995f6fe-3bea-48d1-ab06-48948446593c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/pictures",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/C:/Users/dodan/Downloads/IMG_20200312_155432.jpg"
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/pictures",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"pictures"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/pictures/test",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/pictures/32bdb75a-4eee-4515-b770-c306bbbc6e31",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"pictures",
+						"32bdb75a-4eee-4515-b770-c306bbbc6e31"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/comments/my",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/comments/d7cf0ede-63b3-4910-99b2-fa5c46a30df4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"comments",
+						"d7cf0ede-63b3-4910-99b2-fa5c46a30df4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/comments/my",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"text\": \"Krasna!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/comments/d7cf0ede-63b3-4910-99b2-fa5c46a30df4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"comments",
+						"d7cf0ede-63b3-4910-99b2-fa5c46a30df4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/comments/my",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/comments/8a5a28d2-4dbd-4ca5-a258-46acc7f322d9",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"comments",
+						"8a5a28d2-4dbd-4ca5-a258-46acc7f322d9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/shelterneeds",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/shelterneeds",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"shelterneeds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/shelterneeds",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"category\": \"Krmivo\",\n\t\"name\": \"Granule\",\n\t\"details\": \"Granule NIE suchého typu, preferovane od značiek Whiskas.\",\n\t\"hide\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/shelterneeds",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"shelterneeds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/shelterneeds/my",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/shelterneeds/7927f45e-f45f-4426-a8ac-2db2f2cc4238",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"shelterneeds",
+						"7927f45e-f45f-4426-a8ac-2db2f2cc4238"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/shelterneeds/my",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/shelterneeds/ba5ec001-7e5b-4342-acd7-9582ecc3f35a",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"shelterneeds",
+						"ba5ec001-7e5b-4342-acd7-9582ecc3f35a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/donation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"amount\": 20,\n\t\"donator\": \"2b28135d-baa2-4115-a3fa-cffffbdd8608\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/donation",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"donation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/colours",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/settings/colours",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"colours"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/colours",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Biela\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/settings/colours",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"colours"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/colours",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/settings/colours/3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"colours",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/breeds",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/settings/breeds",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"breeds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/breeds",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Britská modrá\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/settings/breeds",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"breeds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/breeds",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/settings/breeds/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"breeds",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/health_status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/settings/health_status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"health_status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/health_status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"zdravá\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/settings/health_status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"health_status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/settings/health_status",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token_type}} {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/settings/health_status/3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"settings",
+						"health_status",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "56d89765-3a7e-4f10-92a0-852ca12303ca",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "a03453ae-e8da-498a-9b3e-51e7d4c518f9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "4d05a088-cea2-4302-9fea-fe7a0ad3e456",
+			"key": "base_url",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

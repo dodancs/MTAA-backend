@@ -52,3 +52,10 @@ Po importovaní [SQL schémy](schema/) do databázy môžete server spustiť:
 $ python ./server.py
 ```
 
+
+## Testovanie pomocou Postman
+
+Na testovanie sme vytvorili endopinty v Postmanovi pre všetky naše moduly, aby sme ich mohli otestovať.
+
+- [Endpointy](MTAA.postman_collection.json)
+- [Environment](MTAA.postman_environment.json)
