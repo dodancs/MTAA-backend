@@ -55,11 +55,6 @@ def e495(e):
     return jsonify({'error': 'Metóda nie je podporovaná'}), 405
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
-
-
 import module_settings
 import module_pictures
 import module_cats
