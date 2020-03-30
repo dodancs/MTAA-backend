@@ -70,4 +70,4 @@ if __name__ == '__main__':
     # if the server runs unreliably, uncomment the first line, and comment the line with socketio
     # app.run(host='0.0.0.0')
     socketio.run(app, host='0.0.0.0', log_output=True,
-                 port=5000, environ='production', debug=True)
+                 port=5000, use_reloader=False, debug=True)
