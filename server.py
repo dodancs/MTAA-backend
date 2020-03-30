@@ -2,7 +2,6 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager, get_raw_jwt
 from flask_socketio import SocketIO, send, emit
 import json
-import logging
 
 from helpers import Response
 
@@ -68,8 +67,6 @@ import module_donations
 # def websocketTest():
 #     emit('my response', {'data': 'Connected'})
 if __name__ == '__main__':
-
-    logging.basicConfig(filename='server.log', level=logging.DEBUG)
     # if the server runs unreliably, uncomment the first line, and comment the line with socketio
     # app.run(host='0.0.0.0')
     socketio.run(app, host='0.0.0.0', debug=True)
