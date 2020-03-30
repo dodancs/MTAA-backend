@@ -179,6 +179,14 @@ def cats_get_all():
     response['page'] = int(page)
     response['cats'] = []
     for cat in query:
+
+        comments = 0
+        try:
+            comments = len(models.Comment.select().where(
+                models.Comment.cat == cat.uuid))
+        except:
+            pass
+
         response['cats'].append({
             "uuid": cat.uuid,
             "name": cat.name,
@@ -194,6 +202,7 @@ def cats_get_all():
             "health_log": cat.health_log,
             "adoptive": True if cat.adoptive else False,
             "pictures": json.loads(cat.pictures),
+            "comments": comments,
             "created_at": cat.created_at.strftime(Config['date_format']),
             "updated_at": cat.updated_at.strftime(Config['date_format'])
         })

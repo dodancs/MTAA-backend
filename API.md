@@ -376,7 +376,8 @@
           "pictures": [
             "uuidstring1",
             "uuidstring2"
-          ]
+          ],
+          "comments": 6
         }
       ]
     }
