@@ -1,7 +1,6 @@
 from flask import request, jsonify, escape
 from flask_jwt_extended import (
-    jwt_required, create_access_token,
-    get_jwt_identity, get_raw_jwt
+    jwt_required, get_jwt_identity
 )
 import uuid
 import json
