@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager, get_raw_jwt
 from flask_socketio import SocketIO, send, emit
 import json
+import logging
 
 from helpers import Response
 
@@ -69,5 +70,8 @@ import module_donations
 if __name__ == '__main__':
     # if the server runs unreliably, uncomment the first line, and comment the line with socketio
     # app.run(host='0.0.0.0')
-    socketio.run(app, host='0.0.0.0', log_output=True,
-                 port=5000, use_reloader=False, debug=True)
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger('werkzeug')
+    print(logger)
+    socketio.run(app, host='0.0.0.0', log=logger, log_output=True,
+                 port=5000, use_reloader=False)
