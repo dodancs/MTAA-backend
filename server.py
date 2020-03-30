@@ -74,4 +74,4 @@ if __name__ == '__main__':
     logger = logging.getLogger('werkzeug')
     print(logger)
     socketio.run(app, host='0.0.0.0', log=logger, log_output=True,
-                 port=5000, use_reloader=False)
+                 port=5000, use_reloader=False, debug=True)
