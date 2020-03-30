@@ -2,13 +2,20 @@ FROM python:3.7
 
 EXPOSE 5000/tcp
 
-WORKDIR /opt/mtaa-backend/
+# Install Python requirements
 
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r ./requirements.txt
-COPY . ./opt/mtaa-backend/
+RUN rm requirements.txt
 
+# Create data directory for the volume
+RUN mkdir /opt/mtaa-backend/
+COPY . ./opt/mtaa-backend/
 VOLUME /opt/mtaa-backend/
+
+# Set the work directory
+
+WORKDIR /opt/mtaa-backend/
 
 CMD [ "python", "./server.py" ]
