@@ -7,6 +7,8 @@ WORKDIR /opt/mtaa-backend/
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r ./requirements.txt
-#COPY . ./opt/mtaa-backend/
+COPY . ./opt/mtaa-backend/
+
+VOLUME /opt/mtaa-backend/
 
 CMD [ "python", "./server.py" ]
