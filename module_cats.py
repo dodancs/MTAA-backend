@@ -148,7 +148,7 @@ def cats_get_all():
     expr_list = []
     for key in f.keys():
         if f[key] is not None:
-            if key == 'adoptive':
+            if key == 'adoptive' and f[key]:
                 expr_list.append(models.Cat.adoptive == f[key])
             if key == 'sex':
                 expr_list.append(models.Cat.sex == f[key])
