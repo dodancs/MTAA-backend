@@ -69,4 +69,4 @@ import module_donations
 if __name__ == '__main__':
     # if the server runs unreliably, uncomment the first line, and comment the line with socketio
     # app.run(host='0.0.0.0')
-    socketio.run(app, host='0.0.0.0', debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
