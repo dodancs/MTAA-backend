@@ -5,5 +5,5 @@ CREATE TABLE `mtaa`.`donations` (
   `amount` DOUBLE(5, 2) NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE `donations_donator` (`donator`)
+  INDEX `donations_donator` (`donator`)
 );
