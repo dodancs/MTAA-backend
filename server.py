@@ -5,6 +5,7 @@ import json
 import logging
 
 from helpers import Response
+from models.BaseModel import db
 
 # Open configuration file
 with open('config.json', encoding='utf8') as config_file:
@@ -17,6 +18,20 @@ app.config['JWT_SECRET_KEY'] = Config['jwt_secret']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = Config['jwt_expires']
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
+
+
+# Connect to the database before request
+@app.before_request
+def _db_connect():
+    db.connect()
+
+
+# Disconnect from the database after finishing the request
+@app.teardown_request
+def _db_close(exc):
+    if not db.is_closed():
+        db.close()
+
 
 # Setup JWT
 jwt = JWTManager(app)
