@@ -1104,7 +1104,7 @@
     ```json
     {
       "count": 3,
-      "colours": [
+      "breeds": [
         {
           "id": 0,
           "name": "perzská"
