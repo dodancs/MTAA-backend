@@ -342,7 +342,7 @@
     - Filter: adoptovateľná: `adoptive=true`
     - Filter: pohlavie: `sex=true`
     - Filter: plemeno: `breed=1`
-    - Filter: zdravotný stav: `health_statu=1`
+    - Filter: zdravotný stav: `health_status=1`
     - Filter: maximálny vek: `age_up=30`
     - Filter: minimálny vek: `age_down=10`
     - Filter: farba srsti: `colour=7`

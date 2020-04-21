@@ -63,86 +63,96 @@ def cats_get_all():
 
     # if adoptive is specified
     if 'adoptive' in request.args.keys():
-        if str(request.args.get('adoptive')) not in ('true', 'false'):
+        if str(request.args.get('adoptive')) not in ('true', 'false', 'null'):
             return Response('invalid_args')
         f['adoptive'] = True if str(
-            request.args.get('adoptive')) == 'true' else False
+            request.args.get('adoptive')) == 'true' else False if str(
+            request.args.get('adoptive')) == 'false' else None
 
     # if sex is specified
     if 'sex' in request.args.keys():
-        if str(request.args.get('sex')) not in ('true', 'false'):
+        if str(request.args.get('sex')) not in ('true', 'false', 'null'):
             return Response('invalid_args')
-        f['sex'] = True if str(request.args.get('sex')) == 'true' else False
+        f['sex'] = True if str(request.args.get('sex')) == 'true' else False if str(
+            request.args.get('sex')) == 'false' else None
 
     # if breed is specified
     if 'breed' in request.args.keys():
-        try:
-            f['breed'] = int(request.args.get('breed'))
-        except:
-            return Response('invalid_args')
-        try:
-            models.Breed.get(models.Breed.id == f['breed'])
-        except:
-            return Response('invalid_args')
+        if str(request.args.get('breed')) != 'null':
+            try:
+                f['breed'] = int(request.args.get('breed'))
+            except:
+                return Response('invalid_args')
+            try:
+                models.Breed.get(models.Breed.id == f['breed'])
+            except:
+                return Response('invalid_args')
 
     # if health status is specified
     if 'health_status' in request.args.keys():
-        try:
-            f['health_status'] = int(request.args.get('health_status'))
-        except:
-            return Response('invalid_args')
-        try:
-            models.HealthStatus.get(
-                models.HealthStatus.id == f['health_status'])
-        except:
-            return Response('invalid_args')
+        if str(request.args.get('health_status')) != 'null':
+            try:
+                f['health_status'] = int(request.args.get('health_status'))
+            except:
+                return Response('invalid_args')
+            try:
+                models.HealthStatus.get(
+                    models.HealthStatus.id == f['health_status'])
+            except:
+                return Response('invalid_args')
 
     # if age upper limit is specified
     if 'age_up' in request.args.keys():
-        try:
-            f['age_up'] = int(request.args.get('age_up'))
-        except:
-            return Response('invalid_args')
+        if str(request.args.get('age_up')) != 'null':
+            try:
+                f['age_up'] = int(request.args.get('age_up'))
+            except:
+                return Response('invalid_args')
 
     # if age lower limit is specified
     if 'age_down' in request.args.keys():
-        try:
-            f['age_down'] = int(request.args.get('age_down'))
-        except:
-            return Response('invalid_args')
+        if str(request.args.get('age_down')) != 'null':
+            try:
+                f['age_down'] = int(request.args.get('age_down'))
+            except:
+                return Response('invalid_args')
 
     # if colour is specified
     if 'colour' in request.args.keys():
-        try:
-            f['colour'] = int(request.args.get('colour'))
-        except:
-            return Response('invalid_args')
-        try:
-            models.Colour.get(
-                models.Colour.id == f['colour'])
-        except:
-            return Response('invalid_args')
+        if str(request.args.get('colour')) != 'null':
+            try:
+                f['colour'] = int(request.args.get('colour'))
+            except:
+                return Response('invalid_args')
+            try:
+                models.Colour.get(
+                    models.Colour.id == f['colour'])
+            except:
+                return Response('invalid_args')
 
     # if castration is specified
     if 'castrated' in request.args.keys():
-        if str(request.args.get('castrated')) not in ('true', 'false'):
+        if str(request.args.get('castrated')) not in ('true', 'false', 'null'):
             return Response('invalid_args')
         f['castrated'] = True if str(request.args.get(
-            'castrated')) == 'true' else False
+            'castrated')) == 'true' else False if str(
+            request.args.get('castrated')) == 'false' else None
 
     # if vaccination is specified
     if 'vaccinated' in request.args.keys():
-        if str(request.args.get('vaccinated')) not in ('true', 'false'):
+        if str(request.args.get('vaccinated')) not in ('true', 'false', 'null'):
             return Response('invalid_args')
         f['vaccinated'] = True if str(request.args.get(
-            'vaccinated')) == 'true' else False
+            'vaccinated')) == 'true' else False if str(
+            request.args.get('vaccinated')) == 'false' else None
 
     # if dewormation is specified
     if 'dewormed' in request.args.keys():
-        if str(request.args.get('dewormed')) not in ('true', 'false'):
+        if str(request.args.get('dewormed')) not in ('true', 'false', 'null'):
             return Response('invalid_args')
         f['dewormed'] = True if str(request.args.get(
-            'dewormed')) == 'true' else False
+            'dewormed')) == 'true' else False if str(
+            request.args.get('dewormed')) == 'false' else None
 
     # building the query condition list
     expr_list = []
