@@ -13,6 +13,7 @@ import models
 
 from __main__ import app, Config, blacklist
 
+
 @app.route('/settings/colours', methods=['GET'])
 def settings_colours_get():
     colours = models.Colour.select()
@@ -25,6 +26,7 @@ def settings_colours_get():
             'name': c.name
         })
     return jsonify(response), 200
+
 
 @app.route('/settings/colours', methods=['POST'])
 @jwt_required
@@ -56,6 +58,7 @@ def settings_colours_add():
 
     return jsonify({'id': colour.id}), 200
 
+
 @app.route('/settings/colours/<id>', methods=['DELETE'])
 @jwt_required
 def settings_colours_delete(id):
@@ -75,7 +78,8 @@ def settings_colours_delete(id):
     colour.delete_instance()
 
     return Response('empty')
-    
+
+
 @app.route('/settings/breeds', methods=['GET'])
 def settings_breeds_get():
     breeds = models.Breed.select()
@@ -88,6 +92,7 @@ def settings_breeds_get():
             'name': b.name
         })
     return jsonify(response), 200
+
 
 @app.route('/settings/breeds', methods=['POST'])
 @jwt_required
@@ -119,6 +124,7 @@ def settings_breeds_add():
 
     return jsonify({'id': breed.id}), 200
 
+
 @app.route('/settings/breeds/<id>', methods=['DELETE'])
 @jwt_required
 def settings_breeds_delete(id):
@@ -138,9 +144,9 @@ def settings_breeds_delete(id):
     breed.delete_instance()
 
     return Response('empty')
-    
 
-@app.route('/settings/health_status', methods=['GET'])
+
+@app.route('/settings/health_statuses', methods=['GET'])
 def settings_health_statuses_get():
     health_statuses = models.HealthStatus.select()
     response = {}
@@ -153,7 +159,8 @@ def settings_health_statuses_get():
         })
     return jsonify(response), 200
 
-@app.route('/settings/health_status', methods=['POST'])
+
+@app.route('/settings/health_statuses', methods=['POST'])
 @jwt_required
 def settings_health_statuses_add():
     current_user = get_jwt_identity()
@@ -183,7 +190,8 @@ def settings_health_statuses_add():
 
     return jsonify({'id': health_status.id}), 200
 
-@app.route('/settings/health_status/<id>', methods=['DELETE'])
+
+@app.route('/settings/health_statuses/<id>', methods=['DELETE'])
 @jwt_required
 def settings_health_statuses_delete(id):
     current_user = get_jwt_identity()
@@ -202,4 +210,3 @@ def settings_health_statuses_delete(id):
     health_status.delete_instance()
 
     return Response('empty')
-    
