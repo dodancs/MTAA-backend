@@ -347,4 +347,18 @@ def auth_delete_user(uuid):
     if uuid == user.uuid:
         blacklist.add(get_raw_jwt()['jti'])
 
+    try:
+        pictures = models.Picture.select().where(models.Picture.owner == uuid)
+        for picture in pictures:
+            if picture.uuid == Confg['default_picture']:
+                continue
+            try:
+                os.remove(Config['upload_folder'] +
+                          str(picture.uuid) + '.' + Config['image_store_format'])
+                picture.delete_instance()
+            except:
+                pass
+    except:
+        pass
+
     return Response('empty')

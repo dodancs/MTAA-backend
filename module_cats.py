@@ -481,6 +481,18 @@ def cats_delete(uuid):
 
     match.delete_instance()
 
+    try:
+        pictures = models.Picture.select().where(models.Picture.owner == uuid)
+        for picture in pictures:
+            try:
+                os.remove(Config['upload_folder'] +
+                          str(picture.uuid) + '.' + Config['image_store_format'])
+                picture.delete_instance()
+            except:
+                pass
+    except:
+        pass
+
     return Response('empty')
 
 
