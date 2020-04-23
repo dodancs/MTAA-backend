@@ -484,7 +484,7 @@
 
 -----------
 
-#### <a name="route-cats-update"></a>/cats/{uuid} : DELETE
+#### <a name="route-cats-delete"></a>/cats/{uuid} : DELETE
 - popis: Odstránenie mačky
 - požiadavka:
   - HTTP hlavičky: 
