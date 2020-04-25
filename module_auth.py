@@ -361,4 +361,14 @@ def auth_delete_user(uuid):
     except:
         pass
 
+    try:
+        models.Favourite.delete().where(models.Favourite.user == uuid).execute()
+    except:
+        pass
+
+    try:
+        models.Comment.delete().where(models.Comment.author == uuid).execute()
+    except:
+        pass
+
     return Response('empty')

@@ -539,6 +539,16 @@ def cats_delete(uuid):
     except:
         pass
 
+    try:
+        models.Favourite.delete().where(models.Favourite.cat == uuid).execute()
+    except:
+        pass
+
+    try:
+        models.Comment.delete().where(models.Comment.cat == uuid).execute()
+    except:
+        pass
+
     match.delete_instance()
 
     return Response('empty')
