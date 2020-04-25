@@ -600,10 +600,9 @@ def cats_like(uuid):
 
     try:
         models.Favourite.get(models.Favourite.user ==
-                             user.uuid and models.Favourite.cat == uuid)
+                             user.uuid & models.Favourite.cat == uuid)
     except peewee.DoesNotExist:
-        favourite = models.Favourite(user=user.uuid, cat=uuid)
-        favourite.save()
+        models.Favourite(user=user.uuid, cat=uuid).save()
     except:
         return Response('server_error')
 
@@ -630,7 +629,7 @@ def cats_unlike(uuid):
 
     try:
         favourite = models.Favourite.get(
-            models.Favourite.user == user.uuid and models.Favourite.cat == uuid)
+            models.Favourite.user == user.uuid & models.Favourite.cat == uuid)
         favourite.delete_instance()
     except peewee.DoesNotExist:
         return Response('empty')
