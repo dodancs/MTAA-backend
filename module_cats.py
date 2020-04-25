@@ -219,6 +219,50 @@ def cats_get_all():
     return jsonify(response), 200
 
 
+@app.route('/cats/<uuid>', methods=['GET'])
+@jwt_required
+def cats_get(uuid):
+    current_user = get_jwt_identity()
+    try:
+        models.User.get(models.User.uuid == current_user)
+    except:
+        return Response('forbidden')
+
+    try:
+        cat = models.Cat.get(models.Cat.uuid == uuid)
+    except peewee.DoesNotExist:
+        return Response('invalid')
+    except:
+        return Response('server_error')
+
+    comments = 0
+    try:
+        comments = len(models.Comment.select().where(
+            models.Comment.cat == cat.uuid))
+    except:
+        pass
+
+    return jsonify({
+        "uuid": cat.uuid,
+        "name": cat.name,
+        "age": cat.age,
+        "sex": True if cat.sex else False,
+        "breed": cat.breed,
+        "health_status": cat.health_status,
+        "castrated": True if cat.castrated else False,
+        "vaccinated": True if cat.vaccinated else False,
+        "dewormed": True if cat.dewormed else False,
+        "colour": cat.colour,
+        "description": cat.description,
+        "health_log": cat.health_log,
+        "adoptive": True if cat.adoptive else False,
+        "pictures": json.loads(cat.pictures),
+        "comments": comments,
+        "created_at": cat.created_at.strftime(Config['date_format']),
+        "updated_at": cat.updated_at.strftime(Config['date_format'])
+    }), 200
+
+
 @app.route('/cats', methods=['POST'])
 @jwt_required
 def cats_add():

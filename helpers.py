@@ -36,6 +36,8 @@ def ConvertImage(bytes, width, height):
         image = Image.open(BytesIO(bytes))
     except PIL.UnidentifiedImageError:
         return None
+    except:
+        return None
 
     if image.format not in Config['image_allowed_format']:
         return None

@@ -13,7 +13,8 @@
   - [Úprava používateľa](#route-auth-updateUser)
   - [Zmazanie používateľa](#route-auth-deleteUser)
 - [Správa mačiek](#route-cats)
-  - [Zorbazenie mačiek](#route-cats-get)
+  - [Zorbazenie mačiek](#route-cats-getAll)
+  - [Zorbazenie konkrétnej mačky](#route-cats-get)
   - [Pridanie mačky](#route-cats-add)
   - [Úprava mačky](#route-cats-update)
   - [Zmazanie mačky](#route-cats-delete)
@@ -323,7 +324,8 @@
 -----------
 
 ### <a name="route-cats"></a>Správa mačiek
-- [Zorbazenie mačiek](#route-cats-get)
+- [Zorbazenie mačiek](#route-cats-getAll)
+- [Zorbazenie konkrétnej mačky](#route-cats-get)
 - [Pridanie mačky](#route-cats-add)
 - [Úprava mačky](#route-cats-update)
 - [Zmazanie mačky](#route-cats-delete)
@@ -331,7 +333,7 @@
 - [Pridanie do obľúbených](#route-cats-like)
 - [Odobratie z obľúbených](#route-cats-unlike)
 
-#### <a name="route-cats-get"></a>/cats : GET
+#### <a name="route-cats-getAll"></a>/cats : GET
 - popis: Zobrazenie všetkých mačiek
 - požiadavka:
   - HTTP hlavičky: 
@@ -394,12 +396,69 @@
 
 -----------
 
+#### <a name="route-cats-get"></a>/cats/{uuid} : GET
+- popis: Zobrazenie konkrétnej mačky
+- požiadavka:
+  - HTTP hlavičky: 
+    - `Authentication: "bearer JWT_ACCESSTOKEN"`
+  - parametre:
+    - __{uuid}__: Unikátny identifikačný reťazec mačky
+
+- odpoveď:
+  - HTTP kód: 200
+  - telo odpovede:
+    ```json
+    {
+      "uuid": "uuidstring",
+      "name": "Micka", 
+      "age": 3,
+      "sex": true,
+      "breed": 1,
+      "health_status": 3,
+      "castrated": false,
+      "vaccinated": true,
+      "dewormed": true,
+      "colour": 7,
+      "desctiption": "Toto je moje zlaticko..",
+      "health_log": "Problemy u veterinara nikdy neboli...",
+      "adoptive": true,
+      "pictures": [
+        "uuidstring1",
+        "uuidstring2"
+      ],
+      "comments": 6
+    }
+    ```
+
+- odpoveď:
+  - HTTP kód: 401
+  - telo odpovede: 
+    ```json
+    {
+      "error": "Prístup zamietnutý..."
+    }
+    ```
+
+- odpoveď:
+  - HTTP kód: 400
+  - telo odpovede: 
+    ```json
+    {
+      "error": "Nesprávne zadané údaje..."
+    }
+    ```
+
+-----------
+
 #### <a name="route-cats-add"></a>/cats : POST
 - popis: Pridanie novej mačky
 - požiadavka:
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
-  - telo požiadavky:
+  
+- odpoveď:
+  - HTTP kód: 200
+  - telo odpovede:
     ```json
     {
       "name": "Micka", 
@@ -422,15 +481,6 @@
     ```
   
 - odpoveď:
-  - HTTP kód: 200
-  - telo odpovede:
-    ```json
-    {
-      "uuid": "uuidnovejmacky"
-    }
-    ```
-  
-- odpoveď:
   - HTTP kód: 400
   - telo odpovede: 
     ```json
@@ -447,7 +497,7 @@
   - HTTP hlavičky: 
     - `Authentication: "bearer JWT_ACCESSTOKEN"`
   - parametre:
-    - __{uuid}__: Unikátny identifikačný reťazec používateľa
+    - __{uuid}__: Unikátny identifikačný reťazec mačky
   - telo požiadavky:
     ```json
     {
