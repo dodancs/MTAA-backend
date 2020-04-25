@@ -523,19 +523,23 @@ def cats_delete(uuid):
     except:
         return Response('server_error')
 
-    match.delete_instance()
-
     try:
-        pictures = models.Picture.select().where(models.Picture.owner == uuid)
-        for picture in pictures:
+        for p in json.loads(match.pictures):
+            picture = models.Picture.get(models.Picture.uuid == p)
+            try:
+                picture.delete_instance()
+            except:
+                pass
+
             try:
                 os.remove(Config['upload_folder'] +
-                          str(picture.uuid) + '.' + Config['image_store_format'])
-                picture.delete_instance()
+                          str(p) + '.' + Config['image_store_format'])
             except:
                 pass
     except:
         pass
+
+    match.delete_instance()
 
     return Response('empty')
 
