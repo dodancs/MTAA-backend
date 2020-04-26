@@ -269,7 +269,6 @@ def auth_update_user(uuid):
         return Response('not_json')
 
     try:
-        email = request.json.get('email', None)
         password = request.json.get('password', None)
         firstname = request.json.get('firstname', None)
         lastname = request.json.get('lastname', None)
@@ -279,7 +278,7 @@ def auth_update_user(uuid):
     except:
         return Response('not_json')
 
-    if not email and not password and not firstname and not lastname and not picture and activated == None and admin == None:
+    if not password and not firstname and not lastname and not picture and activated == None and admin == None:
         return Response('empty')
 
     if admin and not user.admin:
@@ -287,8 +286,6 @@ def auth_update_user(uuid):
     if activated and not user.admin:
         return Response('forbidden')
 
-    if email:
-        match.email = Sanitize(email)
     if password:
         salt = bytes.fromhex(match.password[:(Config['hash_salt_length'] * 2)])
         match.password = MakeHash(Sanitize(password), salt)
@@ -312,8 +309,6 @@ def auth_update_user(uuid):
 
     try:
         match.save()
-    except peewee.IntegrityError:
-        return jsonify({'error': 'E-mailová adresa už bola použitá'}), 400
     except:
         return Response('server_error')
 
