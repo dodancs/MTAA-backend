@@ -81,14 +81,15 @@ def pictures_add():
 @app.route('/pictures/<uuid>', methods=['DELETE'])
 @jwt_required
 def pictures_delete(uuid):
-    if uuid == Config['default_picture']:
-        Response('empty')
 
     current_user = get_jwt_identity()
     try:
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
+
+    if uuid == Config['default_picture']:
+        return Response('empty')
 
     try:
         picture = models.Picture.get(models.Picture.uuid == uuid)
