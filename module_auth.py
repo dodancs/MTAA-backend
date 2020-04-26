@@ -255,7 +255,7 @@ def auth_update_user(uuid):
         user = models.User.get(models.User.uuid == current_user)
     except:
         return Response('forbidden')
-    if uuid != user.uuid or not user.admin:
+    if uuid != user.uuid and not user.admin:
         return Response('forbidden')
 
     try:
