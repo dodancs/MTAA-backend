@@ -453,7 +453,7 @@ def cats_update(uuid):
         if not isinstance(vaccinated, bool):
             return Response('invalid_format')
         match.vaccinated = vaccinated
-    if dewormed:
+    if dewormed != None:
         if not isinstance(dewormed, bool):
             return Response('invalid_format')
         match.dewormed = dewormed
