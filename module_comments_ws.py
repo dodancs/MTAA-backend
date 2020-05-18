@@ -23,12 +23,12 @@ def verify_token(token):
 
 @socketio.on('connect')
 def ws_connect():
-    logger.info('Client connected', request.sid)
+    logger.info('Client connected: ' + str(request.sid))
 
 
 @socketio.on('disconnect')
 def ws_disconnect():
-    logger.info('Client disconnected', request.sid)
+    logger.info('Client disconnected: ' + str(request.sid))
 
 
 @socketio.on('comment')
@@ -77,4 +77,3 @@ def ws_comments_get(data):
         print(e)
         emit('comments', [])
         pass
-
