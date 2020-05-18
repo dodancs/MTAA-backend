@@ -7,6 +7,5 @@ CREATE TABLE `mtaa`.`comments` (
   `text` LONGTEXT NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE `favourites_uuid` (`uuid`),
-  UNIQUE `favourites_cat` (`cat`)
+  UNIQUE `comments_uuid` (`uuid`)
 );

@@ -16,6 +16,9 @@ class User(BaseModel):
     created_at = peewee.DateTimeField(default=datetime.datetime.now)
     updated_at = peewee.DateTimeField()
 
+    def getName(self):
+        return self.firstname + ' ' + self.lastname
+
     def save(self, *args, **kwargs):
         self.updated_at = datetime.datetime.now()
         return super(User, self).save(*args, **kwargs)
