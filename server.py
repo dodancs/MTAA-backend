@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, get_raw_jwt
-from flask_socketio import SocketIO, emit
+# from flask_socketio import SocketIO, emit
 import json
-import logging
+# import logging
 
 from helpers import Response
 from models.BaseModel import db
@@ -12,9 +12,9 @@ with open('config.json', encoding='utf8') as config_file:
     Config = json.load(config_file)
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger('werkzeug')
-print(logger)
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger('werkzeug')
+# print(logger)
 
 # Setup Flask
 app = Flask(__name__)
@@ -67,7 +67,7 @@ def unauthorized_token_callback(reason):
 
 
 # Setup SocketIO
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 # namespace = '/cilicat'
 
 
@@ -81,7 +81,7 @@ import module_pictures
 import module_cats
 import module_auth
 # import module_comments
-import module_comments_ws
+# import module_comments_ws
 import module_shelterneeds
 import module_donations
 
@@ -99,5 +99,7 @@ if __name__ == '__main__':
     # app.run(host='0.0.0.0')
 
     # socketio.init_app(app, cors_allowed_origins="*")
-    socketio.run(app, host='0.0.0.0', log=logger, log_output=True,
-                 port=5000, use_reloader=False, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True,
+            use_reloader=False)
+    # socketio.run(app, host='0.0.0.0', log=logger, log_output=True,
+    #              port=5000, use_reloader=False, debug=True)
